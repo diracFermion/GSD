@@ -4,8 +4,6 @@
 #include <math.h>
 #include "gsd.h"
 #include "stdint.h"
-//#include ".../System.h"
-//#include "../Simulation.h"
 #include "gsd_tools.h"
 #include "gsd_fn.h"
 
