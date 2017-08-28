@@ -12,7 +12,11 @@ def lattice(L):
   s.configuration.dimensions = 3
   s.particles.typeid = []
   s.particles.position = []
+  s.bonds.types = ['A']
+  s.bonds.typeid = []
   s.bonds.group = []
+  s.dihedrals.types = ['A']
+  s.dihedrals.typeid = []
   s.dihedrals.group = []
   
   #	Reading configuration from lattice.dat file
@@ -50,6 +54,12 @@ def lattice(L):
   print((array[ptr]))
   for i in range(s.particles.N):
      s.particles.typeid.append(int(array[ptr+i]))
+  
+  for i in range(s.bonds.N):
+     s.bonds.typeid.append((0))
+  
+  for i in range(s.dihedrals.N):
+     s.dihedrals.typeid.append((0))
 
   s.configuration.box = [L, L,10,0,0,0]
   fname = "init_strip.gsd"

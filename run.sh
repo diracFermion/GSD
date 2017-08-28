@@ -1,3 +1,4 @@
+ulimit -c unlimited
 echo "Compiling gsd.c++ for reading GSD file"
 g++ -g gsd.c++ -o gsd
 

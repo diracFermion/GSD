@@ -24,7 +24,7 @@ void load_gsd( char fname[30], uint64_t frame)
   int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
   float position[NMAX*3];
   uint32_t particleID[NMAX];
-  int8_t particleType[5];
+  char particleType[3][2];
 
   //Open gsd file with handle
   gsd_open(&h,fname,GSD_OPEN_READONLY);
@@ -51,9 +51,9 @@ void load_gsd( char fname[30], uint64_t frame)
   {
 	printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
-  for(int i=0;i<5;i++)
+  for(int i=0;i<3;i++)
   {
-        printf("%u\n",particleType[i]);
+        printf("%s\n",particleType[i]);
   }
   printf("\n# bonds = %d\n",Nb);
   for(int i=0;i<Nb;i++)
