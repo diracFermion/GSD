@@ -6,15 +6,17 @@
 #include "stdint.h"
 #include "gsd_tools.h"
 #include "gsd_fn.h"
-#define KAPPA 5
+#define KAPPA		5.0
+#define EPSILON		800.0
+#define a		1
+
 
 int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float position[NMAX*3];
 uint32_t particleID[NMAX];
 char particleType[3][2];
-float bendingEner[NMAX];
-float bondHarmonicEner[NMAX];
-
+float u_cross_v[3];
+float total_BE,total_SE;
 
 
 void print_and_exit(char *format, ...)
@@ -89,9 +91,8 @@ void load_gsd( char fname[30], uint64_t frame)
   return;
 }
 
-float* cross_product(float u[3],float v[3])
+int cross_product(float u[3],float v[3])
 {
-  static float u_cross_v[3];
   u_cross_v[0] = u[1]*v[2] - u[2]*v[1];
   u_cross_v[1] = u[2]*v[0] - u[0]*v[2];
   u_cross_v[2] = u[0]*v[1] - u[1]*v[0];
@@ -102,14 +103,14 @@ float* cross_product(float u[3],float v[3])
   u_cross_v[1] = u_cross_v[1]/mod_u_cross_v;
   u_cross_v[2] = u_cross_v[2]/mod_u_cross_v;
 
-  return u_cross_v ;
+  return 0;
 }
 
 int bending_energy()
 {
   float vec_cb[3],vec_ab[3],vec_dc[3];
-  float *A,*B;
-  float be,dot_AB;
+  float A[3],B[3];
+  float be,se,dot_AB;
   for(int i=0;i<Nd;i++)
   {
 	for(int j=0;j<3;j++)
@@ -123,9 +124,17 @@ int bending_energy()
 	printf("vec_ab:\t%lf\t%lf\t%lf\n",vec_ab[0],vec_ab[1],vec_ab[2]);
 	printf("vec_dc:\t%lf\t%lf\t%lf\n",vec_dc[0],vec_dc[1],vec_dc[2]);
 	
-	A = cross_product(vec_cb,vec_ab);
-	B = cross_product(vec_cb,vec_dc);
-	dot_AB = (*A) * (*B) + (*(A+1)) * (*(B+1)) + (*(A+2)) * (*(B+2));
+	cross_product(vec_cb,vec_ab);
+	for(int j=0;j<3;j++)
+        {
+		A[j] = u_cross_v[j];
+	}
+	cross_product(vec_cb,vec_dc);
+	for(int j=0;j<3;j++)
+        {
+                B[j] = u_cross_v[j];
+        }
+	dot_AB = A[0]*B[0] + A[1]*B[1] + A[2]*B[2];
 	printf("dot_AB = %lf\n",dot_AB);
 	be = 0.5 * KAPPA * (1+dot_AB);
 
