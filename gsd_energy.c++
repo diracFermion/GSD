@@ -125,7 +125,7 @@ int bending_energy()
 	
 	A = cross_product(vec_cb,vec_ab);
 	B = cross_product(vec_cb,vec_dc);
-	dot_AB = (*A) * (*B) + (*A+1) * (*B+1) + (*A+2) * (*B+2);
+	dot_AB = (*A) * (*B) + (*(A+1)) * (*(B+1)) + (*(A+2)) * (*(B+2));
 	printf("dot_AB = %lf\n",dot_AB);
 	be = 0.5 * KAPPA * (1+dot_AB);
 
