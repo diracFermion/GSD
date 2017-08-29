@@ -22,8 +22,6 @@ Particle TypeIDs
 1
 0
 Dihedral 0:	0 2 1 3
-vec_cb:	0.500000	-0.866025	0.000000
-vec_ab:	-0.500000	-0.866025	0.000000
-vec_dc:	0.500000	0.866025	0.000000
-dot_AB = 5.000000
-BE = 15.000000
+BE = 0.000000
+Total Bending Energy = 0.000000
+Total Bond Harmonic Energy = 0.000000
