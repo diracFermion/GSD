@@ -61,7 +61,7 @@ def lattice(L):
   for i in range(s.dihedrals.N):
      s.dihedrals.typeid.append((0))
 
-  s.configuration.box = [L, L,10,0,0,0]
+  s.configuration.box = [L,L,L,0,0,0]
   fname = "init_strip.gsd"
   gsd.hoomd.create(fname,snapshot=s)
   print ("Strip initialized in file: %s" % fname)
