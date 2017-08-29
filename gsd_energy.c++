@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <math.h>
@@ -108,6 +108,7 @@ int cross_product(float u[3],float v[3])
 
 int bending_energy()
 {
+  total_BE=0;
   float vec_cb[3],vec_ab[3],vec_dc[3];
   float A[3],B[3];
   float be,se,dot_AB;
@@ -137,22 +138,40 @@ int bending_energy()
 	dot_AB = A[0]*B[0] + A[1]*B[1] + A[2]*B[2];
 	printf("dot_AB = %lf\n",dot_AB);
 	be = 0.5 * KAPPA * (1+dot_AB);
-
+	total_BE = total_BE + be;
 	printf("BE = %lf\n",be);
-
-	//bendingEner[]
-	
 
   }
   return 0;
 }
 
+int bond_harmonic_energy()
+{
+  total_SE = 0;
+  float l;//current length of bond
+  float se;
+  for(int i=0;i<Nb;i++)
+  {
+	l=0;
+  	for(int j=0;j<3;j++)
+  	{
+		l = l + (position[3*bondGroup[2*i]+j] - position[3*bondGroup[2*i+1]+j]) * (position[3*bondGroup[2*i]+j] - position[3*bondGroup[2*i+1]+j]);
+	}
+	l = sqrt(l);
+	se = 0.5 * EPSILON * (l-a) * (l-a);
+	printf("Bond %d %d , se = %lf\n",bondGroup[2*i],bondGroup[2*i+1],se);
+	total_SE = total_SE + se;
+  } 
+  return 0;
+}
 
 int main(int argc, char **argv)
 {
   printf("Reading GSD file: %s\n",argv[1]);
   load_gsd(argv[1],0);
   bending_energy();
-  //bond_harmonic_energy();
+  bond_harmonic_energy();
+  printf("System Bending Energy = %lf\n",total_BE);
+  printf("System Bond Harmonic Energy = %lf\n",total_SE);
   return 0;
 }

@@ -27,3 +27,10 @@ vec_ab:	-0.500000	-0.866025	0.000000
 vec_dc:	0.500000	0.866025	0.000000
 dot_AB = -1.000000
 BE = 0.000000
+Bond 1 0 , se = 0.000000
+Bond 2 0 , se = 0.000000
+Bond 2 1 , se = 0.000000
+Bond 3 1 , se = 0.000000
+Bond 3 2 , se = 0.000000
+System Bending Energy = 0.000000
+System Bond Harmonic Energy = 0.000000
