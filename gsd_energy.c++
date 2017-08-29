@@ -96,12 +96,12 @@ float* cross_product(float u[3],float v[3])
   u_cross_v[1] = u[2]*v[0] - u[0]*v[2];
   u_cross_v[2] = u[0]*v[1] - u[1]*v[0];
 
-  float mod_u_cross_v = sqrt(u_cross_v[0]*u_cross_v[0] + u_cross_v[1]*u_cross_v[1] + u_cross_v[2]*u_cross_v[2]);
+/*  float mod_u_cross_v = sqrt(u_cross_v[0]*u_cross_v[0] + u_cross_v[1]*u_cross_v[1] + u_cross_v[2]*u_cross_v[2]);
   
   u_cross_v[0] = u_cross_v[0]/mod_u_cross_v;
   u_cross_v[1] = u_cross_v[1]/mod_u_cross_v;
   u_cross_v[2] = u_cross_v[2]/mod_u_cross_v;
-
+*/
   return u_cross_v ;
 }
 
@@ -125,6 +125,10 @@ int bending_energy()
 	
 	A = cross_product(vec_cb,vec_ab);
 	B = cross_product(vec_cb,vec_dc);
+
+	printf("A: %lf %lf %lf\n",*A,*(A+1),*(A+2));
+	printf("B: %lf %lf %lf\n",*B,*(B+1),*(B+2));
+
 	dot_AB = (*A) * (*B) + (*(A+1)) * (*(B+1)) + (*(A+2)) * (*(B+2));
 	printf("dot_AB = %lf\n",dot_AB);
 	be = 0.5 * KAPPA * (1+dot_AB);
