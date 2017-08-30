@@ -18,21 +18,28 @@ for p in s.particles:
 harmonic = md.bond.harmonic()
 dih = md.dihedral.harmonic()
 
-dih.dihedral_coeff.set('A', k=4.000, d=1, n=1)
+dih.dihedral_coeff.set('A', k=5.000, d=1, n=1)
 
 harmonic.bond_coeff.set('A', k=800.000, r0=1.0)
 
-
-hoomd.analyze.log(filename="Observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=5000, header_prefix="#", overwrite=True)
+hoomd.analyze.log(filename="observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=10, header_prefix="#", overwrite=True)
 
 md.integrate.mode_standard(dt=0.0010)
 
 group1 = hoomd.group.type(name='group1', type='A')
 
-hoomd.dump.gsd(filename="trajectory.gsd", group=group.all(), period=5000, overwrite=True)
+hoomd.dump.gsd(filename="trajectory.gsd", group=group.all(), period=10, overwrite=True)
 
 
 md.integrate.nvt(group=group1,kT=1.0, tau=0.2)
 
-hoomd.run(2e6)
+print(s.particles[0])
 
+hoomd.run(100)
+
+print(s.particles[0])
+
+hoomd.run(100)
+print(s.particles[0])
+
+print(s.bonds[0])
