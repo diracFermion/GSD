@@ -9,7 +9,7 @@
 #define KAPPA		5.0
 #define EPSILON		800.0
 #define a		1
-
+#define M		1
 
 int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float position[NMAX*3];
@@ -17,6 +17,7 @@ uint32_t particleID[NMAX];
 char particleType[3][2];
 float u_cross_v[3];
 float total_BE,total_SE;
+float accln_stretch_x[NMAX],accln_stretch_y[NMAX],accln_stretch_z[NMAX];
 
 
 void print_and_exit(char *format, ...)
@@ -120,10 +121,10 @@ int bending_energy()
 		vec_ab[j] = position[3*dihedralGroup[4*i]+j] - position[3*dihedralGroup[4*i+1]+j];
 		vec_dc[j] = position[3*dihedralGroup[4*i+3]+j] - position[3*dihedralGroup[4*i+2]+j];
 	}
-	printf ("Dihedral %d:\t%d %d %d %d\n",i,dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
-	printf("vec_cb:\t%lf\t%lf\t%lf\n",vec_cb[0],vec_cb[1],vec_cb[2]);
-	printf("vec_ab:\t%lf\t%lf\t%lf\n",vec_ab[0],vec_ab[1],vec_ab[2]);
-	printf("vec_dc:\t%lf\t%lf\t%lf\n",vec_dc[0],vec_dc[1],vec_dc[2]);
+	//printf ("Dihedral %d:\t%d %d %d %d\n",i,dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
+	//printf("vec_cb:\t%lf\t%lf\t%lf\n",vec_cb[0],vec_cb[1],vec_cb[2]);
+	//printf("vec_ab:\t%lf\t%lf\t%lf\n",vec_ab[0],vec_ab[1],vec_ab[2]);
+	//printf("vec_dc:\t%lf\t%lf\t%lf\n",vec_dc[0],vec_dc[1],vec_dc[2]);
 	
 	cross_product(vec_cb,vec_ab);
 	for(int j=0;j<3;j++)
@@ -136,10 +137,10 @@ int bending_energy()
                 B[j] = u_cross_v[j];
         }
 	dot_AB = A[0]*B[0] + A[1]*B[1] + A[2]*B[2];
-	printf("dot_AB = %lf\n",dot_AB);
+	//printf("dot_AB = %lf\n",dot_AB);
 	be = 0.5 * KAPPA * (1+dot_AB);
 	total_BE = total_BE + be;
-	printf("BE = %lf\n",be);
+	//printf("BE = %lf\n",be);
 
   }
   return 0;
@@ -159,9 +160,36 @@ int bond_harmonic_energy()
 	}
 	l = sqrt(l);
 	se = 0.5 * EPSILON * (l-a) * (l-a);
-	printf("Bond %d %d , se = %lf\n",bondGroup[2*i],bondGroup[2*i+1],se);
+	//printf("Bond %d %d , se = %lf\n",bondGroup[2*i],bondGroup[2*i+1],se);
 	total_SE = total_SE + se;
   } 
+  return 0;
+}
+
+int accelaration_bondstretch()
+{
+  float l;//current length of bond
+  float ax,ay,az;
+  for(int i=0;i<Nb;i++)
+  {
+        l=0;
+        for(int j=0;j<3;j++)
+        {
+                l = l + (position[3*bondGroup[2*i]+j] - position[3*bondGroup[2*i+1]+j]) * (position[3*bondGroup[2*i]+j] - position[3*bondGroup[2*i+1]+j]);
+        }
+        l = sqrt(l);
+	ax = (-EPSILON/M) * (l-a)/a * (position[3*bondGroup[2*i]] - position[3*bondGroup[2*i+1]]);
+	ay = (-EPSILON/M) * (l-a)/a * (position[3*bondGroup[2*i]+1] - position[3*bondGroup[2*i+1]+1]);
+	az = (-EPSILON/M) * (l-a)/a * (position[3*bondGroup[2*i]+2] - position[3*bondGroup[2*i+1]+2]);
+
+	accln_stretch_x[bondGroup[2*i]] = accln_stretch_x[bondGroup[2*i]] + ax;
+	accln_stretch_y[bondGroup[2*i]] = accln_stretch_y[bondGroup[2*i]] + ay;
+	accln_stretch_z[bondGroup[2*i]] = accln_stretch_z[bondGroup[2*i]] + az;
+
+	accln_stretch_x[bondGroup[2*i+1]] = accln_stretch_x[bondGroup[2*i+1]] - ax;
+	accln_stretch_y[bondGroup[2*i+1]] = accln_stretch_y[bondGroup[2*i+1]] - ay; 
+	accln_stretch_z[bondGroup[2*i+1]] = accln_stretch_z[bondGroup[2*i+1]] - az;
+  }
   return 0;
 }
 
@@ -173,5 +201,16 @@ int main(int argc, char **argv)
   bond_harmonic_energy();
   printf("System Bending Energy = %lf\n",total_BE);
   printf("System Bond Harmonic Energy = %lf\n",total_SE);
+  load_gsd("trajectory.gsd",atoi(argv[2]));
+  bending_energy();
+  bond_harmonic_energy();
+  printf("System Bending Energy = %lf\n",total_BE);
+  printf("System Bond Harmonic Energy = %lf\n",total_SE);
+  printf("System Potential Energy = %lf\n",total_BE+total_SE);
+  accelaration_bondstretch();
+  for(int i=0;i<N;i++)
+  {
+	printf("%lf %lf %lf\n",accln_stretch_x[i],accln_stretch_y[i],accln_stretch_z[i]);
+  }
   return 0;
 }
