@@ -33,13 +33,13 @@ hoomd.dump.gsd(filename="../Sim_dump/trajectory.gsd", group=group.all(), period=
 
 md.integrate.nvt(group=group1,kT=1.0, tau=0.2)
 
-print(s.particles[0])
+print(s.particles[5])
 
 hoomd.run(100)
 
-print(s.particles[0])
+print(s.particles[5])
 
 hoomd.run(100)
-print(s.particles[0])
+print(s.particles[5])
 
-print(s.bonds[0])
+print(s.bonds[5])

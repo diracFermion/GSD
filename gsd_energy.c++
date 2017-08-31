@@ -12,7 +12,7 @@
 #define M		1
 
 int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
-float position[NMAX*3];
+float position[NMAX*3],velocity[NMAX*3],acceleration[NMAX*3];
 uint32_t particleID[NMAX];
 char particleType[3][2];
 float u_cross_v[3];
@@ -45,6 +45,10 @@ void load_gsd( char fname[30], uint64_t frame)
   gsd_read_chunk(&h,particleID,gsd_find_chunk(&h,frame,"particles/typeid"));
   //Read positions
   gsd_read_chunk(&h,position,gsd_find_chunk(&h,frame,"particles/position"));
+  //Read velocity
+  gsd_read_chunk(&h,velocity,gsd_find_chunk(&h,frame,"particles/velocity"));
+  //Read acceleration
+  gsd_read_chunk(&h,acceleration,gsd_find_chunk(&h,frame,"particles/acceleration"));
 
 
   if(frame==0)
@@ -60,18 +64,14 @@ void load_gsd( char fname[30], uint64_t frame)
   }
 
   printf("# particles = %d\n",N);
-//  printf("# particleType = %u\n",particleType);
-  for(int i=0;i<N;i++)
-  {
-	printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
-  }
-  for(int i=0;i<3;i++)
-  {
-        printf("%s\n",particleType[i]);
-  }
 
   if(frame==0)
   {
+	  printf("\n\n\nSystem Attributes read from Frame 0\n");
+	  for(int i=0;i<3;i++)
+  	  {
+          	printf("%s\n",particleType[i]);
+  	  }
 	  printf("\n# bonds = %d\n",Nb);
 	  for(int i=0;i<Nb;i++)
 	  {
@@ -82,15 +82,38 @@ void load_gsd( char fname[30], uint64_t frame)
 	  {
 		printf("%d %d %d %d\n",dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
 	  }
+	  printf("Particle TypeIDs\n");
+  	  for(int i=0;i<N;i++)
+  	  {
+        	printf("%u\n",particleID[i]);
+  	  }
+	  printf("************************************************\n");
+          printf("************************************************\n\n\n\n");
   }
 
-  printf("Particle TypeIDs\n");
+  printf("Particle Positions at Frame %d\n",frame);
   for(int i=0;i<N;i++)
   {
-        printf("%u\n",particleID[i]);
-  } 
+        printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
+  }
+
+  printf("Particle Velocity\n");
+  for(int i=0;i<N;i++)
+  {
+        printf("%lf %lf %lf\n",velocity[3*i],velocity[3*i+1],velocity[3*i+2]);
+  }
+  
+  printf("Particle Accelaration\n");
+  for(int i=0;i<N;i++)
+  {
+        printf("%lf %lf %lf\n",acceleration[3*i],acceleration[3*i+1],acceleration[3*i+2]);
+  }
+  printf("\n\n");
+
   return;
 }
+
+  
 
 int cross_product(float u[3],float v[3])
 {
@@ -199,14 +222,14 @@ int main(int argc, char **argv)
   load_gsd(argv[1],0);
   bending_energy();
   bond_harmonic_energy();
-  printf("System Bending Energy = %lf\n",total_BE);
-  printf("System Bond Harmonic Energy = %lf\n",total_SE);
+  printf("\n\nSystem Bending Energy = %lf\n",total_BE);
+  printf("System Bond Harmonic Energy = %lf\n\n",total_SE);
   load_gsd("../Sim_dump/trajectory.gsd",atoi(argv[2]));
   bending_energy();
   bond_harmonic_energy();
-  printf("System Bending Energy = %lf\n",total_BE);
+  printf("\n\nSystem Bending Energy = %lf\n",total_BE);
   printf("System Bond Harmonic Energy = %lf\n",total_SE);
-  printf("System Potential Energy = %lf\n",total_BE+total_SE);
+  printf("System Potential Energy = %lf\n\n",total_BE+total_SE);
   accelaration_bondstretch();
   for(int i=0;i<N;i++)
   {
