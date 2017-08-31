@@ -12,7 +12,8 @@
 #define M		1
 
 int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
-float position[NMAX*3],velocity[NMAX*3],acceleration[NMAX*3];
+float velocity[NMAX*3],acceleration[NMAX*3];
+float position[NMAX*3];
 uint32_t particleID[NMAX];
 char particleType[3][2];
 float u_cross_v[3];
@@ -94,7 +95,7 @@ void load_gsd( char fname[30], uint64_t frame)
   printf("Particle Positions at Frame %d\n",frame);
   for(int i=0;i<N;i++)
   {
-        printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
+        printf("%f %f %f\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
 
   printf("Particle Velocity\n");
