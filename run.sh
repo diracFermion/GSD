@@ -1,5 +1,6 @@
 ulimit -c unlimited
 
+
 echo "Compiling gsd.c++ for reading GSD file"
 g++ -g gsd_energy.c++ -o gsd
 
