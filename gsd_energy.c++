@@ -190,6 +190,10 @@ int bond_harmonic_energy()
   return 0;
 }
 
+/***********************************************************************************/
+/*	Function for calculating accleration from Bond Harmonic Potential	   */
+/***********************************************************************************/
+
 int accelaration_bondstretch()
 {
   float l;//current length of bond
@@ -216,6 +220,10 @@ int accelaration_bondstretch()
   }
   return 0;
 }
+
+/***********************************************************************************/
+/*      Function for calculating accleration from Dihedral Harmonic Potential      */
+/***********************************************************************************/
 
 int main(int argc, char **argv)
 {
