@@ -7,7 +7,7 @@ import sys
 import random
 
 hoomd.context.initialize()
-s = hoomd.init.read_gsd("init_strip.gsd")
+s = hoomd.init.read_gsd("../Sim_dump/init_strip.gsd")
 
 for p in s.particles:
 	if p.type == 'A':
@@ -22,13 +22,13 @@ dih.dihedral_coeff.set('A', k=5.000, d=1, n=1)
 
 harmonic.bond_coeff.set('A', k=800.000, r0=1.0)
 
-hoomd.analyze.log(filename="observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=10, header_prefix="#", overwrite=True)
+hoomd.analyze.log(filename="../Sim_dump/observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=10, header_prefix="#", overwrite=True)
 
 md.integrate.mode_standard(dt=0.0010)
 
 group1 = hoomd.group.type(name='group1', type='A')
 
-hoomd.dump.gsd(filename="trajectory.gsd", group=group.all(), period=10, overwrite=True)
+hoomd.dump.gsd(filename="../Sim_dump/trajectory.gsd", group=group.all(), period=10, overwrite=True)
 
 
 md.integrate.nvt(group=group1,kT=1.0, tau=0.2)

@@ -201,7 +201,7 @@ int main(int argc, char **argv)
   bond_harmonic_energy();
   printf("System Bending Energy = %lf\n",total_BE);
   printf("System Bond Harmonic Energy = %lf\n",total_SE);
-  load_gsd("trajectory.gsd",atoi(argv[2]));
+  load_gsd("../Sim_dump/trajectory.gsd",atoi(argv[2]));
   bending_energy();
   bond_harmonic_energy();
   printf("System Bending Energy = %lf\n",total_BE);

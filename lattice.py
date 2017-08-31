@@ -21,7 +21,7 @@ def lattice(L):
   
   #	Reading configuration from lattice.dat file
   array = []
-  lines = [line.rstrip('\n') for line in open('lattice.dat')]
+  lines = [line.rstrip('\n') for line in open('../Sim_dump/lattice.dat')]
   for l in lines:
       array.append(l)
 
@@ -62,7 +62,7 @@ def lattice(L):
      s.dihedrals.typeid.append((0))
 
   s.configuration.box = [L,L,L,0,0,0]
-  fname = "init_strip.gsd"
+  fname = "../Sim_dump/init_strip.gsd"
   gsd.hoomd.create(fname,snapshot=s)
   print ("Strip initialized in file: %s" % fname)
   return fname

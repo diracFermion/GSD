@@ -1,8 +1,11 @@
 ulimit -c unlimited
+
+
+
 echo "Compiling gsd.c++ for reading GSD file"
-g++ -g gsd.c++ -o gsd
+g++ -g gsd_energy.c++ -o gsd
 
 echo "Reading file : init_strip.gsd"
-./gsd init_strip.gsd > out.txt
+./gsd ../Sim_dump/init_strip.gsd $1 > ../Sim_dump/gsd_out.txt
 
-echo "Check output in out.txt"
+echo "Check output in ../Sim_dump/gsd_out.txt"
