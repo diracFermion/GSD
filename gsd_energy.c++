@@ -19,6 +19,7 @@ char particleType[3][2];
 float u_cross_v[3];
 float total_BE,total_SE;
 float accln_stretch_x[NMAX],accln_stretch_y[NMAX],accln_stretch_z[NMAX];
+float accln_dihedral[3][NMAX];
 
 
 void print_and_exit(char *format, ...)
@@ -116,7 +117,7 @@ void load_gsd( char fname[30], uint64_t frame)
 
   
 
-int cross_product(float u[3],float v[3])
+int cross_product_energy(float u[3],float v[3])
 {
   u_cross_v[0] = u[1]*v[2] - u[2]*v[1];
   u_cross_v[1] = u[2]*v[0] - u[0]*v[2];
@@ -150,12 +151,12 @@ int bending_energy()
 	//printf("vec_ab:\t%lf\t%lf\t%lf\n",vec_ab[0],vec_ab[1],vec_ab[2]);
 	//printf("vec_dc:\t%lf\t%lf\t%lf\n",vec_dc[0],vec_dc[1],vec_dc[2]);
 	
-	cross_product(vec_cb,vec_ab);
+	cross_product_energy(vec_cb,vec_ab);
 	for(int j=0;j<3;j++)
         {
 		A[j] = u_cross_v[j];
 	}
-	cross_product(vec_cb,vec_dc);
+	cross_product_energy(vec_cb,vec_dc);
 	for(int j=0;j<3;j++)
         {
                 B[j] = u_cross_v[j];
@@ -196,6 +197,14 @@ int bond_harmonic_energy()
 
 int accelaration_bondstretch()
 {
+  /*	Initializing the accln_stretch_coordinate array	*/
+  for(int i=0;i<NMAX;i++)
+  {
+	accln_stretch_x[i]=0;
+	accln_stretch_y[i]=0;
+	accln_stretch_z[i]=0;
+  }
+
   float l;//current length of bond
   float ax,ay,az;
   for(int i=0;i<Nb;i++)
@@ -222,10 +231,36 @@ int accelaration_bondstretch()
 }
 
 /***********************************************************************************/
-/*      Function for calculating accleration from Dihedral Harmonic Potential      */
+/*      Functions for calculating accleration from Dihedral Harmonic Potential      */
 /***********************************************************************************/
+float cross_product(float u[3],float v[3])
+{
+  u_cross_v[0] = u[1]*v[2] - u[2]*v[1];
+  u_cross_v[1] = u[2]*v[0] - u[0]*v[2];
+  u_cross_v[2] = u[0]*v[1] - u[1]*v[0];
+
+  float mod_u_cross_v = sqrt(u_cross_v[0]*u_cross_v[0] + u_cross_v[1]*u_cross_v[1] + u_cross_v[2]*u_cross_v[2]);
+  
+  return mod_u_cross_v;
+}
+
+float dot_product(float u[3],float v[3])
+{
+  return (u[0]*v[0] + u[1]*v[1] + u[2]*v[2]);
+}
+
 int accelaration_dihedral()
 {
+  /*	Initializing the accln_dihedral array	*/
+  for(int i=0;i<3;i++)
+  {
+    for(int j=0;j<NMAX;j++)
+      {
+	accln_dihedral[i][j]=0;
+      }
+  }
+
+  /*	Generating the Levi-Civita Tensor	*/
   float levi_civita[3][3][3];
   for(int i=0;i<3;i++)
   {
@@ -242,9 +277,45 @@ int accelaration_dihedral()
 		}
 	}
   } 
+
+  float R_ij[3],R_kj[3],R_lk[3];
+  float Rkj_x_Rlk[3],Rkj_x_Rij[3];
+  float mod_Rkj_x_Rlk,mod_Rkj_x_Rij;
   for(int i=0;i<Nd;i++)
   {
-	
+	/*	Generating the vectors making the dihedral	*/
+	for(int b=0;b<3;b++)
+	{
+		R_kj[b] = position[3*dihedralGroup[4*i+2]+b] - position[3*dihedralGroup[4*i+1]+b];
+                R_ij[b] = position[3*dihedralGroup[4*i]+b] - position[3*dihedralGroup[4*i+1]+b];
+                R_lk[b] = position[3*dihedralGroup[4*i+3]+b] - position[3*dihedralGroup[4*i+2]+b];
+	}
+	/*	Generating the two cross products and modulus that go into the dihedral potential calculation	*/
+ 	mod_Rkj_x_Rlk = cross_product(R_kj,R_lk);
+        for(int b=0;b<3;b++)
+        {
+                Rkj_x_Rlk[b] = u_cross_v[b];
+        }
+	mod_Rkj_x_Rij = cross_product(R_kj,R_lk);
+        for(int b=0;b<3;b++)
+        {
+                Rkj_x_Rlk[b] = u_cross_v[b];
+        }
+	/*	Accelaration when node i of the dihedral is wiggled	*/
+	for(int b=0;b<3;b++)
+	{
+	  for(int c=0;c<3;c++)
+	  {
+	    for(int d=0;d<3;d++)
+	      {
+		/*	Accelaration when node i is wiggled	*/
+	        accln_dihedral[b][dihedralGroup[4*i]] += -(KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] *Rkj_x_Rlk[c]*R_kj[d])  + (KAPPA/(M*mod_Rkj_x_Rlk*pow(mod_Rkj_x_Rij,2))) * (levi_civita[b][c][d]*Rkj_x_Rij[c]*R_kj[d]*dot_product(Rkj_x_Rlk,Rkj_x_Rij));
+		
+		/*	Accelaration when node l is wiggles	*/
+		accln_dihedral[b][dihedralGroup[4*i+3]] += -(KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] *Rkj_x_Rij[c]*R_lk[d])  + (KAPPA/(M*pow(mod_Rkj_x_Rlk,2)*mod_Rkj_x_Rij,2)) * (levi_civita[b][c][d]*Rkj_x_Rlk[c]*R_kj[d]*dot_product(Rkj_x_Rlk,Rkj_x_Rij));
+	      }
+	  }
+        }
   }
   return 0;
 }
