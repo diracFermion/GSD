@@ -299,9 +299,9 @@ int accelaration_dihedral()
 	mod_Rkj_x_Rij = cross_product(R_kj,R_lk);
         for(int b=0;b<3;b++)
         {
-                Rkj_x_Rlk[b] = u_cross_v[b];
+                Rkj_x_Rij[b] = u_cross_v[b];
         }
-	/*	Accelaration when node i of the dihedral is wiggled	*/
+	/*	Accelaration derived from derivative of dihedral harmonic potential	*/
 	for(int b=0;b<3;b++)
 	{
 	  for(int c=0;c<3;c++)
@@ -310,7 +310,13 @@ int accelaration_dihedral()
 	      {
 		/*	Accelaration when node i is wiggled	*/
 	        accln_dihedral[b][dihedralGroup[4*i]] += -(KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] *Rkj_x_Rlk[c]*R_kj[d])  + (KAPPA/(M*mod_Rkj_x_Rlk*pow(mod_Rkj_x_Rij,2))) * (levi_civita[b][c][d]*Rkj_x_Rij[c]*R_kj[d]*dot_product(Rkj_x_Rlk,Rkj_x_Rij));
-		
+	
+		/*	Accelaration when node j is wiggled   NOT CORRECT one of the 2nd terms goes to 0 CHECK */
+		accln_dihedral[b][dihedralGroup[4*i+1]] += ((KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] * (Rkj_x_Rij[c] *(R_kj[d]-R_ij[d])))) + (((-KAPPA*dot_product(Rkj_x_Rlk,Rkj_x_Rij))/(2*M*pow(mod_Rkj_x_Rij,3)*mod_Rkj_x_Rlk)*levi_civita[b][c][d] * Rkj_x_Rij[c]*(R_kj[d]-R_ij[d])) + ((KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] * (Rkj_x_Rlk[c] *(R_kj[d]-R_lk[d])))) + (((-KAPPA*dot_product(Rkj_x_Rlk,Rkj_x_Rij))/(2*M*pow(mod_Rkj_x_Rlk,3)*mod_Rkj_x_Rij)*levi_civita[b][c][d] * Rkj_x_Rlk[c]*(R_kj[d]-R_lk[d]));
+
+		/*      Accelaration when node k is wiggled  NOT CORRECT   */
+		accln_dihedral[b][dihedralGroup[4*i+2]] += ((KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] * (Rkj_x_Rij[c] *(R_kj[d]-R_ij[d])))) + (((-KAPPA*dot_product(Rkj_x_Rlk,Rkj_x_Rij))/(2*M*pow(mod_Rkj_x_Rij,3)*mod_Rkj_x_Rlk)*levi_civita[b][c][d] * Rkj_x_Rij[c]*(R_kj[d]-R_ij[d])) + ((KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] * (Rkj_x_Rlk[c] *(R_kj[d]-R_lk[d])))) + (((-KAPPA*dot_product(Rkj_x_Rlk,Rkj_x_Rij))/(2*M*pow(mod_Rkj_x_Rlk,3)*mod_Rkj_x_Rij)*levi_civita[b][c][d] * Rkj_x_Rlk[c]*(R_kj[d]-R_lk[d]));
+			
 		/*	Accelaration when node l is wiggles	*/
 		accln_dihedral[b][dihedralGroup[4*i+3]] += -(KAPPA/(2*M*mod_Rkj_x_Rlk*mod_Rkj_x_Rij)) * (levi_civita[b][c][d] *Rkj_x_Rij[c]*R_lk[d])  + (KAPPA/(M*pow(mod_Rkj_x_Rlk,2)*mod_Rkj_x_Rij,2)) * (levi_civita[b][c][d]*Rkj_x_Rlk[c]*R_kj[d]*dot_product(Rkj_x_Rlk,Rkj_x_Rij));
 	      }
