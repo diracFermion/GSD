@@ -224,6 +224,31 @@ int accelaration_bondstretch()
 /***********************************************************************************/
 /*      Function for calculating accleration from Dihedral Harmonic Potential      */
 /***********************************************************************************/
+int accelaration_dihedral()
+{
+  float levi_civita[3][3][3];
+  for(int i=0;i<3;i++)
+  {
+	for(int j=0;j<3;j++)
+	{
+		for(int k=0;k<3;k++)
+		{
+			if((i==0 && j==1 && k==2)||(i==1 && j==2 && k==0)||(i==2 && j==0 && k==1))
+				levi_civita[i][j][k]=1.0;
+			else if((i==0 && j==2 && k==1)||(i==2 && j==1 && k==0)||(i==1 && j==0 && k==2))
+				levi_civita[i][j][k] = -1.0;
+			else
+				levi_civita[i][j][k] = 0;
+		}
+	}
+  } 
+  for(int i=0;i<Nd;i++)
+  {
+	
+  }
+  return 0;
+}
+
 
 int main(int argc, char **argv)
 {

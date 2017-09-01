@@ -12,6 +12,8 @@ def lattice(L):
   s.configuration.dimensions = 3
   s.particles.typeid = []
   s.particles.position = []
+  s.particles.velocity = []
+  s.particles.accelaration = []
   s.bonds.types = ['A']
   s.bonds.typeid = []
   s.bonds.group = []
@@ -32,7 +34,11 @@ def lattice(L):
     x,y,z = c
     #s.particles.typeid.append(0)
     s.particles.position.append((x,y,z))
-  
+ 
+  for i in range(s.particles.N):
+    s.particles.velocity.append((0,0,0))
+    s.particles.accelaration.append((1,1,1))
+ 
   ptr = 1+s.particles.N
   #print((array[ptr]))
   s.bonds.N = int(array[ptr])

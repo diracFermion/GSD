@@ -28,7 +28,7 @@ md.integrate.mode_standard(dt=0.0010)
 
 group1 = hoomd.group.type(name='group1', type='A')
 
-hoomd.dump.gsd(filename="../Sim_dump/trajectory.gsd", group=group.all(), period=10, overwrite=True)
+hoomd.dump.gsd(filename="../Sim_dump/trajectory.gsd", group=group.all(), period=10, overwrite=True,static=[])
 
 print(s.particles[5])
 
