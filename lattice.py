@@ -8,7 +8,7 @@ import sys
 # Initialization function
 def lattice(L):
   s = gsd.hoomd.Snapshot()
-  s.particles.types = ['A','B','C']
+  s.particles.types = ['A','B','C','D']
   s.configuration.dimensions = 3
   s.particles.typeid = []
   s.particles.position = []
