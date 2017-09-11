@@ -18,7 +18,7 @@ for p in s.particles:
 harmonic = md.bond.harmonic()
 dih = md.dihedral.harmonic()
 
-dih.dihedral_coeff.set('A', k=5.000, d=1, n=1)
+dih.dihedral_coeff.set('A', k=10.000, d=1, n=1)
 
 harmonic.bond_coeff.set('A', k=800.000, r0=1.0)
 

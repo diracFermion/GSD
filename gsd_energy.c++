@@ -15,7 +15,7 @@ int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float velocity[NMAX*3],acceleration[NMAX*3];
 float position[NMAX*3];
 uint32_t particleID[NMAX];
-char particleType[3][2];
+char particleType[5][2];
 float u_cross_v[3];
 float total_BE,total_SE;
 float accln_stretch_x[NMAX],accln_stretch_y[NMAX],accln_stretch_z[NMAX];
@@ -65,12 +65,12 @@ void load_gsd( char fname[30], uint64_t frame)
 	  gsd_read_chunk(&h,dihedralGroup,gsd_find_chunk(&h,frame,"dihedrals/group"));
   }
 
-  printf("# particles = %d\n",N);
+  //printf("# particles = %d\n",N);
 
   if(frame==0)
   {
 	  printf("\n\n\nSystem Attributes read from Frame 0\n");
-	  for(int i=0;i<3;i++)
+	  for(int i=0;i<5;i++)
   	  {
           	printf("%s\n",particleType[i]);
   	  }
@@ -93,22 +93,22 @@ void load_gsd( char fname[30], uint64_t frame)
           printf("************************************************\n\n\n\n");
   }
 
-  printf("Particle Positions at Frame %d\n",frame);
+  //printf("Particle Positions at Frame %d\n",frame);
   for(int i=0;i<N;i++)
   {
-        printf("%f %f %f\n",position[3*i],position[3*i+1],position[3*i+2]);
+        //printf("%f %f %f\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
 
-  printf("Particle Velocity\n");
+  //printf("Particle Velocity\n");
   for(int i=0;i<N;i++)
   {
-        printf("%lf %lf %lf\n",velocity[3*i],velocity[3*i+1],velocity[3*i+2]);
+        //printf("%lf %lf %lf\n",velocity[3*i],velocity[3*i+1],velocity[3*i+2]);
   }
   
-  printf("Particle Accelaration\n");
+  //printf("Particle Accelaration\n");
   for(int i=0;i<N;i++)
   {
-        printf("%lf %lf %lf\n",acceleration[3*i],acceleration[3*i+1],acceleration[3*i+2]);
+        //printf("%lf %lf %lf\n",acceleration[3*i],acceleration[3*i+1],acceleration[3*i+2]);
   }
   printf("\n\n");
 
@@ -335,16 +335,25 @@ int main(int argc, char **argv)
   bond_harmonic_energy();
   printf("\n\nSystem Bending Energy = %lf\n",total_BE);
   printf("System Bond Harmonic Energy = %lf\n\n",total_SE);
-  load_gsd("../Sim_dump/trajectory.gsd",atoi(argv[2]));
+ /* load_gsd("../Sim_dump/trajectory.gsd",atoi(argv[2]));
   bending_energy();
   bond_harmonic_energy();
   printf("\n\nSystem Bending Energy = %lf\n",total_BE);
   printf("System Bond Harmonic Energy = %lf\n",total_SE);
   printf("System Potential Energy = %lf\n\n",total_BE+total_SE);
-  accelaration_bondstretch();
-  for(int i=0;i<N;i++)
+  *///accelaration_bondstretch();
+/*  for(int i=0;i<N;i++)
   {
 	printf("%lf %lf %lf\n",accln_stretch_x[i],accln_stretch_y[i],accln_stretch_z[i]);
+  }*/
+  FILE *fp;
+  fp = fopen("../Sim_dump_wall/oscillator.txt", "wa");  
+  for(uint64_t i=1000;i<2000;i++)
+  {
+	load_gsd("../Sim_dump_wall/trajectory.gsd",i);
+        fprintf(fp,"%d %lf %lf\n",i,position[0],position[1]);
+	printf("%d %lf %lf\n",i,position[0],position[1]);
   }
+  fclose(fp);
   return 0;
 }
