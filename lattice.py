@@ -6,7 +6,7 @@ import gsd.hoomd
 import sys
 
 # Initialization function
-def lattice(L):
+def lattice(L,input_file,output_file):
   s = gsd.hoomd.Snapshot()
   s.particles.types = ['A','B','C','D']
   s.configuration.dimensions = 3
@@ -23,7 +23,8 @@ def lattice(L):
   
   #	Reading configuration from lattice.dat file
   array = []
-  lines = [line.rstrip('\n') for line in open('../Sim_dump/lattice.dat')]
+  #lines = [line.rstrip('\n') for line in open('../Sim_dump/lattice.dat')]
+  lines = [line.rstrip('\n') for line in open(input_file)]
   for l in lines:
       array.append(l)
 
@@ -68,7 +69,8 @@ def lattice(L):
      s.dihedrals.typeid.append((0))
 
   s.configuration.box = [L,L,L,0,0,0]
-  fname = "../Sim_dump/init_strip.gsd"
+  #fname = "../Sim_dump/init_strip.gsd"
+  fname = output_file;
   gsd.hoomd.create(fname,snapshot=s)
   print ("Strip initialized in file: %s" % fname)
   return fname
@@ -76,17 +78,22 @@ def lattice(L):
 # Parameters
 
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 4:
   print("Usage: python %s [L] " % sys.argv[0])
+  print("Usage: python %s [input_file] " % sys.argv[1])
+  print("Usage: python %s [output_file] " % sys.argv[2])
   exit()
 
 
 # Parameters
 L = float(sys.argv[1])
+input_file = sys.argv[2]
+output_file = sys.argv[3]
+
 
 # User output
 print("Parameters:")
 print("    L = %4.2e" % (L))
 
-lattice(L)
+lattice(L,input_file,output_file)
 
