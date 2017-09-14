@@ -61,9 +61,10 @@ def lattice(L,input_file,output_file):
   print((array[ptr]))
   for i in range(s.particles.N):
      s.particles.typeid.append(int(array[ptr+i]))
-  
+
+  ptr = ptr+s.particles.N  
   for i in range(s.bonds.N):
-     s.bonds.typeid.append((0))
+     s.bonds.typeid.append(int(array[ptr+i]))
   
   for i in range(s.dihedrals.N):
      s.dihedrals.typeid.append((0))

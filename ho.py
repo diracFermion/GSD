@@ -28,7 +28,7 @@ dih = md.dihedral.harmonic()
 dih.dihedral_coeff.set('A', k=5.000, d=1, n=1)
 #dih.dihedral_coeff.set('B', k=5.000, d=1, n=1)
 harmonic.bond_coeff.set('A', k=800.000, r0=1.0)
-harmonic.bond_coeff.set('B', k=0.000, r0=5.0)
+harmonic.bond_coeff.set('B', k=1.000, r0=5.0)
 
 #lj=md.wall.lj(walls, r_cut=75.0)
 #lj.force_coeff.set('B', sigma=1.0,epsilon=0.0, r_cut=75.0)
@@ -37,7 +37,7 @@ harmonic.bond_coeff.set('B', k=0.000, r0=5.0)
 #lj.force_coeff.set('D', sigma=1.0,epsilon=5.0, r_cut=75.0)
 
 
-hoomd.analyze.log(filename="../Sim_dump_ribbon_ho/observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=5000, header_prefix="#", overwrite=True)
+hoomd.analyze.log(filename="../Sim_dump_ribbon_ho/observable.log", quantities=["temperature", "potential_energy","bond_harmonic_energy","kinetic_energy","dihedral_harmonic_energy"], period=10000, header_prefix="#", overwrite=True)
 
 md.integrate.mode_standard(dt=0.0010)
 
@@ -48,7 +48,7 @@ group13 = hoomd.group.union(name='group13',a=group1,b=group3)
 
 md.constrain.oneD(group=group3, constraint_vector=[1,0,0])
 
-hoomd.dump.gsd(filename="../Sim_dump_ribbon_ho/trajectory.gsd", group=group.all(), period=5000, overwrite=True,static=[])
+hoomd.dump.gsd(filename="../Sim_dump_ribbon_ho/trajectory.gsd", group=group.all(), period=10000, overwrite=True,static=[])
 
 #print(s.particles[2899])
 
@@ -57,7 +57,7 @@ md.integrate.nvt(group=group13,kT=1.0, tau=0.2)
 
 #print(s.particles[5])
 
-hoomd.run(1e5)
+hoomd.run(1e7)
 
 #print(s.particles[5])
 
