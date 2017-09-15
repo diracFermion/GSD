@@ -4,12 +4,13 @@
 #include <math.h>
 #include "gsd.h"
 #include "stdint.h"
-#include "gsd_tools.h"
+#include "gsd_read.h"
 #include "gsd_fn.h"
 #define KAPPA 5
-#define FRAMES 201
+#define FRAMES 2001
 #define NX 50
 #define LEN 2900
+#define NMAX 50000
 
 int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float position[NMAX*3];
