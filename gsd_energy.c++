@@ -7,8 +7,14 @@
 #include "gsd_tools.h"
 #include "gsd_fn.h"
 #define KAPPA 5
+#define FRAMES 2001
+#define NX 50
+#define LEN 2900
+#define NMAX 50000
 
-int N,Nb,Nd,i,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
+
+
+int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float position[NMAX*3];
 uint32_t particleID[NMAX];
 char particleType[3][2];
@@ -31,7 +37,7 @@ void load_gsd( char fname[30], uint64_t frame)
 {
 
   struct gsd_handle h;
-  
+ 
   //Open gsd file with handle
   gsd_open(&h,fname,GSD_OPEN_READONLY);
   //Read number of particles
@@ -55,36 +61,39 @@ void load_gsd( char fname[30], uint64_t frame)
 	  //Read dihedral group
 	  gsd_read_chunk(&h,dihedralGroup,gsd_find_chunk(&h,frame,"dihedrals/group"));
   }
+  
+  //Close GSD file handle
+  gsd_close(&h);
 
-  printf("# particles = %d\n",N);
+  //printf("# particles = %d\n",N);
 //  printf("# particleType = %u\n",particleType);
   for(int i=0;i<N;i++)
   {
-	printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
+	//printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
   for(int i=0;i<3;i++)
   {
-        printf("%s\n",particleType[i]);
+        //printf("%s\n",particleType[i]);
   }
 
   if(frame==0)
   {
-	  printf("\n# bonds = %d\n",Nb);
+	  //printf("\n# bonds = %d\n",Nb);
 	  for(int i=0;i<Nb;i++)
 	  {
-		printf("%d %d\n",bondGroup[2*i],bondGroup[2*i+1]);
+		//printf("%d %d\n",bondGroup[2*i],bondGroup[2*i+1]);
 	  }
-	  printf("# dihedrals = %d\n",Nd);
+	  //printf("# dihedrals = %d\n",Nd);
 	  for(int i=0;i<Nd;i++)
 	  {
-		printf("%d %d %d %d\n",dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
+		//printf("%d %d %d %d\n",dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
 	  }
   }
 
-  printf("Particle TypeIDs\n");
+  //printf("Particle TypeIDs\n");
   for(int i=0;i<N;i++)
   {
-        printf("%u\n",particleID[i]);
+        //printf("%u\n",particleID[i]);
   } 
   return;
 }
@@ -130,10 +139,6 @@ int bending_energy()
 	be = 0.5 * KAPPA * (1+dot_AB);
 
 	printf("BE = %lf\n",be);
-
-	//bendingEner[]
-	
-
   }
   return 0;
 }
@@ -141,9 +146,14 @@ int bending_energy()
 
 int main(int argc, char **argv)
 {
-  printf("Reading GSD file: %s\n",argv[1]);
+  //printf("Reading GSD file: %s\n",argv[1]);
   load_gsd(argv[1],0);
-  bending_energy();
+  //bending_energy();
   //bond_harmonic_energy();
+  for(int frames=1;frames<FRAMES;frames++)
+  {
+	load_gsd(argv[2],frames);//Passing the trajectory.gsd file to read frame data
+	printf("%d\t%lf\t%lf\n",frames,position[3*(NX-1)+2],position[3*(LEN-NX)+2]);		
+  }
   return 0;
 }
