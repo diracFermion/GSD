@@ -26,13 +26,13 @@ dih = md.dihedral.harmonic()
 
 walls = md.wall.group()
 walls.add_plane(origin=(-1,-1,0),normal=(1,1,0),inside=True)
-#print(walls)
+print(walls)
 
 dih.dihedral_coeff.set('A', k=1.000, d=1, n=1)
 harmonic.bond_coeff.set('A', k=720.000, r0=1.0)
 
 lj=md.wall.lj(walls, r_cut=25.0)
-lj.force_coeff.set('B', sigma=1.0,epsilon=50.0, r_cut=25.0)
+lj.force_coeff.set('B', sigma=1.0,epsilon=10000.0, r_cut=25.0)
 lj.force_coeff.set('A', sigma=1.0,epsilon=0.0, r_cut=25.0)
 lj.force_coeff.set('C', sigma=1.0,epsilon=0.0, r_cut=25.0)
 lj.force_coeff.set('D', sigma=1.0,epsilon=0.0, r_cut=25.0)
