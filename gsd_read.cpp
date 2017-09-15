@@ -53,6 +53,7 @@ void load_gsd( char fname[30], uint64_t frame)
           gsd_read_chunk(&h,dihedralGroup,gsd_find_chunk(&h,frame,"dihedrals/group"));
   }
 
+  gsd_close(&h);
   //printf("# particles = %d\n",N);
 //  printf("# particleType = %u\n",particleType);
   for(int i=0;i<N;i++)
