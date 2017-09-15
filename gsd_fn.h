@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
-
 #include "gsd.h"
 
 /*! \file gsd.c
