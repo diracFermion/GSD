@@ -1,4 +1,5 @@
 gsd
+*.o
 init_strip.gsd
 out.txt
 Observable.log
