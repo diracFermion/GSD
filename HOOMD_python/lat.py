@@ -14,7 +14,7 @@ def lattice(L,input_file,output_file):
   s.particles.position = []
   s.particles.velocity = []
   s.particles.accelaration = []
-  s.bonds.types = ['A','B']
+  s.bonds.types = ['A']
   s.bonds.typeid = []
   s.bonds.group = []
   s.dihedrals.types = ['A']
