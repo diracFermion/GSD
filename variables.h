@@ -9,6 +9,7 @@
 
 
 extern int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
+//N:#particles, Nb:#bonds, Nd:#dihedrals
 extern float position[NMAX*3];
 extern uint32_t particleID[NMAX];
 extern char particleType[3][2];

@@ -117,3 +117,32 @@ double bond_harmonic_energy()
   } 
   return (total_BHE);
 }
+
+/*	Function evaluating Average Z height above z=0 plane	*/
+double avg_hgt()
+{
+   double hgt=0;
+   for(int i=0;i<N;i++)
+   {
+	hgt+=position[3*i+2];
+   }
+   return (hgt/N);
+}
+
+/*	Average <h^2> = 1/N * Sum_i(z_i - <z>)^2	*/
+double avg_hgt_sq()
+{
+   double hgtSq=0;
+   double h_avg = avg_hgt();
+   for(int i=0;i<N;i++)
+   {
+        hgtSq+=pow((position[3*i+2]-h_avg),2);
+   }
+   return (hgtSq/N);
+   
+}
+
+
+
+
+
