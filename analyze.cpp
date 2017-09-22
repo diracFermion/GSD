@@ -8,6 +8,28 @@
 
 float bendingEner[NMAX];
 float bondHarmonicEner[NMAX];
+float backbone;
+
+float bond_length (int i,int j)
+{
+  return (sqrt(pow(position[3*i]-position[3*j],2)+pow(position[3*i+1]-position[3*j+1],2)+\
+					pow(position[3*i+2]-position[3*j+2],2)));
+}
+
+int backbone_length(int frame,FILE *fp)
+{
+  int node;
+  backbone=0;
+  for(int i=2;i<NX-1;i++)
+  {
+	node = (NY/2)*NX + i;
+	backbone += bond_length(node,node-1);
+	//printf("%d\t%d\t%lf\n",node,node-1,bond_length(node,node-1));	  
+  }
+  fprintf (fp,"%d\t%lf\n",frame,backbone);
+  //fclose(fp);
+  return 0;
+}
 
 
 float* cross_product(float u[3],float v[3])

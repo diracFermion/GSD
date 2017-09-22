@@ -6,15 +6,15 @@ import gsd.hoomd
 import sys
 import random
 
-k=20.000 #Kappa
+k=2.000 #Kappa
 e=1440.000*k/2 #Epsilon
 nx=100
 ny=11
-Run=1
+Run=2
 
-print "Kappa = ",k,"Epsilon = ",e
+print ("Kappa = ",k,"Epsilon = ",e)
 obser_file = '../../Sim_dump_ribbon/observable_k'+str(k)+'_r'+str(Run)+'.log'
-print "Observable data is dumped in file: ",obser_file
+print ("Observable data is dumped in file: ",obser_file)
 traj_file = '../../Sim_dump_ribbon/trajectory_k'+str(k)+'_r'+str(Run)+'.gsd'
 
 
@@ -55,5 +55,5 @@ hoomd.dump.gsd(filename=traj_file, group=group.all(), period=5000, overwrite=Tru
 
 md.integrate.nvt(group=group123,kT=1.0, tau=0.2)
 
-hoomd.run(3e6)
+hoomd.run(1e8)
 

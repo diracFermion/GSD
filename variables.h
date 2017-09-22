@@ -1,7 +1,8 @@
 #define KAPPA 5
-#define FRAMES 2001
-#define NX 50
-#define LEN 2900
+#define FRAMES 20001
+#define NX 100
+#define NY 11
+#define LEN 1100
 #define NMAX 50000
 
 
