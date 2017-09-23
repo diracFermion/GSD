@@ -19,17 +19,21 @@ int main(int argc, char **argv)
   double dhe,bhe;
   double backbone_T0;
 
+  for(int run=1;run<=RUN;run++)
+  {
   //sprintf(filepath,argv[3]);
-  // Output filepath
-  sprintf(filepath,"../Sim_dump_ribbon/TE_L%dW_%d_k%.1f_r%d.log",NX,NY,KAPPA,RUN);
+  // Output filepath 
+  sprintf(filepath,"../Sim_dump_ribbon/L%d_W%d_k%.1f_r%d.log",NX,NY,KAPPA,run);
   printf("Filename of analyzed data: %s\n",filepath);
   
   // Init_strip.gsd filepath
   sprintf(init_strip,"../Sim_dump_ribbon/init_strip_L%d_W%d.gsd",NX,NY);  
+  printf("Init_strip.gsd : %s\n",init_strip);
 
   // Trajectory.gsd filepath
-  sprintf(trajectory_file,"../Sim_dump_ribbon/traj_L%dW_%d_k%.1f_r%d.gsd",NX,NY,KAPPA,RUN);
-
+  // traj_L101_W21_k10.0_r1.gsd
+  sprintf(trajectory_file,"../Sim_dump_ribbon/traj_L%d_W%d_k%.1f_r%d.gsd",NX,NY,KAPPA,run);
+  printf("Trajectory File : %s\n",trajectory_file);
 
   fp = fopen(filepath, "w");
   if (fp == NULL)
@@ -57,5 +61,6 @@ int main(int argc, char **argv)
 	fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos());
   }
   fclose(fp);
+  }
   return 0;
 }

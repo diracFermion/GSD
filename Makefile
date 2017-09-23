@@ -3,7 +3,7 @@ OBJS = $(SRC:.cpp=.o)
 DEPS = variables.h
 CXX = g++
 DEBUG = -g
-CXXFLAGS = -Wall -c $(DEBUG)
+CXXFLAGS = -Wall -c $(DEBUG) -std=c++0x
 LFLAGS = $(DEBUG) -O2 -Wall 
 
 GSD : $(OBJS)

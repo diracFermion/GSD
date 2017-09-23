@@ -1,12 +1,14 @@
-#define KAPPA 2.0
-#define FRAMES 10
+#define KAPPA 10.0
+#define STEPS 69840000
+#define PERIOD 10000
+#define FRAMES STEPS/PERIOD
 #define NX 101
 #define NY 21
 #define LEN NX*NY
 #define NMAX 50000
-#define EPSILON 1440.0
+#define EPSILON 7200.0
 #define a 1.0
-#define RUN 1
+#define RUN 10
 
 extern int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 //N:#particles, Nb:#bonds, Nd:#dihedrals

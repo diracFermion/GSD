@@ -4,8 +4,10 @@
 #ifndef __GSD_H__
 #define __GSD_H__
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <string.h>
+#include <limits>
+#include <cstdint>
 
 #ifdef __cplusplus
 extern "C" {
