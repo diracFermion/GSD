@@ -2,11 +2,11 @@
 #define FRAMES 10
 #define NX 101
 #define NY 21
-#define LEN 1000
+#define LEN NX*NY
 #define NMAX 50000
 #define EPSILON 1440.0
 #define a 1.0
-
+#define RUN 1
 
 extern int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 //N:#particles, Nb:#bonds, Nd:#dihedrals

@@ -124,7 +124,8 @@ double avg_hgt()
    double hgt=0;
    for(int i=0;i<N;i++)
    {
-	hgt+=position[3*i+2];
+	if(particleID[i]==0 || particleID[i]==4)
+		hgt+=position[3*i+2];
    }
    return (hgt/N);
 }
@@ -136,13 +137,27 @@ double avg_hgt_sq()
    double h_avg = avg_hgt();
    for(int i=0;i<N;i++)
    {
-        hgtSq+=pow((position[3*i+2]-h_avg),2);
+	if(particleID[i]==0 || particleID[i]==4)
+        	hgtSq+=pow((position[3*i+2]-h_avg),2);
    }
    return (hgtSq/N);
    
 }
 
-
-
+/*	Slider average position	*/
+double avg_slider_pos()
+{
+   double slider_pos=0;
+   int slider_node=0;
+   for(int i=0;i<N;i++)
+   {
+	if(particleID[i]==3)
+	{
+		slider_pos+=position[3*i];
+		slider_node++;
+	}
+   }
+   return (slider_pos/slider_node);
+}
 
 
