@@ -1,5 +1,5 @@
 #define KAPPA 10.0
-#define STEPS 69840000
+#define STEPS 100000000
 #define PERIOD 10000
 #define FRAMES STEPS/PERIOD
 #define NX 101
@@ -18,3 +18,6 @@ extern char particleType[3][2];
 extern double bendingEner[NMAX];
 extern double bondHarmonicEner[NMAX];
 extern double total_DHE,total_BHE;
+extern double hgt_fluctuation[NMAX];
+extern double h_avg_node[NMAX];
+extern double hgt_fluctuation[NMAX];

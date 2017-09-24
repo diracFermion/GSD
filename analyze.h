@@ -6,3 +6,8 @@ double backbone_length(int);
 double avg_hgt();
 double avg_hgt_sq();
 double avg_slider_pos();
+int initialize();
+int sum_hgt_node();
+int avg_hgt_node(int);
+int hgt_profile();
+int avg_hgt_profile(FILE *,int);

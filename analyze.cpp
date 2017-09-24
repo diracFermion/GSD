@@ -10,6 +10,8 @@ double bendingEner[NMAX];
 double bondHarmonicEner[NMAX];
 double backbone;
 double total_DHE,total_BHE;
+double hgt_fluctuation[NMAX]; 
+double h_avg_node[NMAX];
 
 
 double bond_length (int i,int j)
@@ -160,4 +162,70 @@ double avg_slider_pos()
    return (slider_pos/slider_node);
 }
 
+/*	Initialize arrays	*/
+int initialize()
+{
+   for(int i=0;i<N;i++)
+   {
+	h_avg_node[i]=0;
+        hgt_fluctuation[i]=0;
+   }
+   return 0;
+}
 
+/*	Height sum at each node	over frames	*/
+int sum_hgt_node()
+{
+   for(int i=0;i<N;i++)
+   {
+	h_avg_node[i]+=position[3*i+2];
+   }
+   return 0;
+}
+
+/*	Average Height at each node over all frames from all runs	*/	
+int avg_hgt_node(int tot_frames)
+{
+   if (tot_frames == 0)
+   {
+        printf("Average Node Hgt computation is dividing by Zero\n");
+	return 0;
+   }
+   for(int i=0;i<N;i++)
+   {
+	h_avg_node[i]=h_avg_node[i]/tot_frames;
+   }
+   return 0;
+}
+
+/*	Height fluctuation profile of the ribbon	*/
+int hgt_profile()
+{
+   for(int i=0;i<N;i++)
+   {
+        if(particleID[i]==0 || particleID[i]==4)
+                hgt_fluctuation[i]+=pow((position[3*i+2]-h_avg_node[i]),2);
+   }
+   return 0;
+}
+
+/*	Average Height Fluctuation	*/
+int avg_hgt_profile(FILE *hgt,int tot_frames)
+{
+   if (tot_frames == 0)
+   {
+        printf("Average Hgt Fluctuation computation is dividing by Zero\n");
+	return 0;
+   }
+   for(int i=0;i<N;i++)
+   {
+        if(particleID[i]==0 || particleID[i]==4)
+                hgt_fluctuation[i]=hgt_fluctuation[i]/tot_frames;
+        if(i%NX!=NX-1)
+		fprintf(hgt,"%.8f ",hgt_fluctuation[i]);
+	else
+		fprintf(hgt,"%.8f\n",hgt_fluctuation[i]);
+	
+   }
+   return 0;
+}
