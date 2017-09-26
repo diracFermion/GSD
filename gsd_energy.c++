@@ -8,8 +8,9 @@
 #include "gsd_fn.h"
 #define KAPPA 5
 #define FRAMES 2001
-#define NX 50
-#define LEN 2900
+#define NX 101
+#define NY 21
+#define LEN NX*NY
 #define NMAX 50000
 
 
@@ -147,13 +148,28 @@ int bending_energy()
 int main(int argc, char **argv)
 {
   //printf("Reading GSD file: %s\n",argv[1]);
+  /* 	reading bond and dihedral data from initial strip gsd file	*/
   load_gsd(argv[1],0);
   //bending_energy();
   //bond_harmonic_energy();
-  for(int frames=1;frames<FRAMES;frames++)
+
+  /*	Trajectory File		*/ 
+  FILE *fp;
+  char last_frame[256];
+  sprintf(last_frame,argv[3]);
+  fp = fopen(last_frame,"w"); 
+
+  load_gsd(argv[2],10);
+  for(int i=0;i<LEN;i++)
   {
-	load_gsd(argv[2],frames);//Passing the trajectory.gsd file to read frame data
-	printf("%d\t%lf\t%lf\n",frames,position[3*(NX-1)+2],position[3*(LEN-NX)+2]);		
+	fprintf(fp,"%.8f %.8f %.8f\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
+  fclose(fp);
+  //for(int frames=1;frames<FRAMES;frames++)
+  //{
+	//load_gsd(argv[2],frames);//Passing the trajectory.gsd file to read frame data
+	//printf("%d\t%lf\t%lf\n",frames,position[3*(NX-1)+2],position[3*(LEN-NX)+2]);
+	
+  //}
   return 0;
 }
