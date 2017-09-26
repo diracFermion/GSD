@@ -147,6 +147,8 @@ int bending_energy()
 
 int main(int argc, char **argv)
 {
+
+  //Pass init_strip.gsd trajectory.gsd output.dat
   //printf("Reading GSD file: %s\n",argv[1]);
   /* 	reading bond and dihedral data from initial strip gsd file	*/
   load_gsd(argv[1],0);
