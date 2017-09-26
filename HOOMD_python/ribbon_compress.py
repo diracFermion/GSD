@@ -26,13 +26,9 @@ print ("Initial init strip GSD file :",init_strip)
 hoomd.context.initialize()
 s = hoomd.init.read_gsd(init_strip)
 
-#lines = [line.rstrip('\n') for line in open('filename')]
-
+#Reading lines from file containing frame data (thermalized ribbon) left end free sliding
+thermal_ribbon = '../../Sim_dump_ribbon/'
 lines = [line.rstrip('\n') for line in open('/home/sourav/Sim_dump_ribbon/test.dat')]
-#print ("CHECK HERE ")
-#print (lines[10])
-#parts = lines[10].split()
-#print (float(parts[2]))
 
 for p in s.particles:
 	#print (lines[i])
