@@ -13,8 +13,8 @@ ny=21
 Run=1
 s=96.80437093 #Thermalized avg position of slider
 d=2.93372430 #Thermalized compression
-c=3.0 #Compress ribbon
-
+c=0.2 #Compress ribbon
+i=0 #counter to iterate over lines in the last frame position file
 
 print ("Kappa = ",k,"Epsilon = ",e)
 obser_file = '../../Sim_dump_ribbon/obser_L'+str(nx)+'W_'+str(ny)+'_e'+str(e)+'_k'+str(k)+'_c'+str(c)+'_r'+str(Run)+'.log'
@@ -26,17 +26,39 @@ print ("Initial init strip GSD file :",init_strip)
 hoomd.context.initialize()
 s = hoomd.init.read_gsd(init_strip)
 
-for p in s.particles:
-	if (p.type == 'A' or p.type == 'E'):
-		x, y, z = p.position
-		z += random.uniform(-0.10,0.10)
-		p.position = (x,y,z)
+#lines = [line.rstrip('\n') for line in open('filename')]
+
+lines = [line.rstrip('\n') for line in open('/home/sourav/Sim_dump_ribbon/test.dat')]
+#print ("CHECK HERE ")
+#print (lines[10])
+#parts = lines[10].split()
+#print (float(parts[2]))
 
 for p in s.particles:
+	#print (lines[i])
+	if (p.type != 'B' or p.type != 'D'):
+		pos = lines[i].split()	
+		x = float(pos[0])
+		y = float(pos[1])
+		z = float(pos[2])
+		p.position = (x,y,z)
 	if p.type == 'D':
 		x, y, z = p.position
 		x = x-(d+c)
 		p.position = (x,y,z)
+	i=i+1
+
+#for p in s.particles:
+#	if (p.type == 'A' or p.type == 'E'):
+#		x, y, z = p.position
+#		z += random.uniform(-0.10,0.10)
+#		p.position = (x,y,z)
+
+#for p in s.particles:
+#	if p.type == 'D':
+#		x, y, z = p.position
+#		x = x-(d+c)
+#		p.position = (x,y,z)
 
 harmonic = md.bond.harmonic()
 dih = md.dihedral.harmonic()
