@@ -1,2 +1,4 @@
 GSD
 *.o
+*.txt
+*.dat
