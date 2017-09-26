@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   FILE *fp,*hgt;
   char filepath[256],init_strip[256],trajectory_file[256],hgt_profile_file[256];
   double dhe,bhe;
-  double backbone_T0;
+  double backbone_T0,slider_T0;;
   int frame_cnt=0;
 
   // Init_strip.gsd filepath
@@ -56,8 +56,9 @@ int main(int argc, char **argv)
 	  load_gsd(init_strip,0);
 	  backbone_T0 = backbone_length(0);
 	  //backbone_length(0,fp);
-	  fprintf(fp,"Frames\tDihedral_Bending_Energy\tBond_Harmonic_Energy\tPotential_Energy\tDelta_Backbone\tAvg_hgt\tAvg_hgt_Sq\tAvg_Slider_Pos\n");  
-	  fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",0,bending_energy(),bond_harmonic_energy(),bending_energy()+bond_harmonic_energy(),backbone_length(0),avg_hgt(),avg_hgt_sq(),avg_slider_pos());
+	  slider_T0 = avg_slider_pos();
+	  fprintf(fp,"Frames\tDihedral_Bending_Energy\tBond_Harmonic_Energy\tPotential_Energy\tDelta_Backbone\tAvg_hgt\tAvg_hgt_Sq\tAvg_Slider_Pos\tDelta_Slider\n");  
+	  fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",0,bending_energy(),bond_harmonic_energy(),bending_energy()+bond_harmonic_energy(),backbone_length(0),avg_hgt(),avg_hgt_sq(),avg_slider_pos(),slider_T0-avg_slider_pos());
 
 	  for(int frames=1;frames<FRAMES;frames++)
 	  {
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 		//printf("%d\t%lf\t%lf\n",frames,position[3*(NX-1)+2],position[3*(LEN-NX)+2]);
 		dhe = bending_energy();
 		bhe = bond_harmonic_energy();
-		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos());
+		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),slider_T0-avg_slider_pos());
 		if(frames>FRAMES/2)
 		{
 			frame_cnt++;
@@ -82,10 +83,12 @@ int main(int argc, char **argv)
   frame_cnt=0;
   for(int run=1;run<=RUN;run++)
   {
-	for(int frames=frames/2;frames<FRAMES;frames++)
+	for(int frames=FRAMES/2;frames<FRAMES;frames++)
 	{
+		
 		// Trajectory.gsd filepath
          	sprintf(trajectory_file,"../Sim_dump_ribbon/traj_L%d_W%d_k%.1f_r%d.gsd",NX,NY,KAPPA,run);
+		load_gsd(trajectory_file,frames);
 		hgt_profile();
 		frame_cnt++;
 	}

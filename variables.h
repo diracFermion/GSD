@@ -1,4 +1,4 @@
-#define KAPPA 10.0
+#define KAPPA 5.0
 #define STEPS 100000000
 #define PERIOD 10000
 #define FRAMES STEPS/PERIOD
@@ -6,7 +6,7 @@
 #define NY 21
 #define LEN NX*NY
 #define NMAX 50000
-#define EPSILON 7200.0
+#define EPSILON 3600.0
 #define a 1.0
 #define RUN 10
 
