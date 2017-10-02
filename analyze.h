@@ -11,3 +11,5 @@ int sum_hgt_node();
 int avg_hgt_node(int);
 int hgt_profile();
 int avg_hgt_profile(FILE *,int);
+int width_hgt(int);
+int print_width(FILE *);

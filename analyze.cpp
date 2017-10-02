@@ -12,7 +12,7 @@ double backbone;
 double total_DHE,total_BHE;
 double hgt_fluctuation[NMAX]; 
 double h_avg_node[NMAX];
-
+double h_width[FRAMES][2*NX];
 
 double bond_length (int i,int j)
 {
@@ -170,6 +170,13 @@ int initialize()
 	h_avg_node[i]=0;
         hgt_fluctuation[i]=0;
    }
+   for(int i=0;i<FRAMES;i++)
+   {
+	for(int j=0;j<NX;j++)
+	{
+   	   h_width[i][j]=0;
+	}
+   }
    return 0;
 }
 
@@ -228,4 +235,62 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
 	
    }
    return 0;
+}
+
+/*	Width Height Average	*/
+int width_hgt(int frame)
+{
+  int k=0,j=0,k_cnt,j_cnt;
+  for(int i=0;i<2*NX;i++)
+  {
+	if(i%2==0)
+	{
+		do {
+		   //printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+k*NX,position[3*((i/2)+k*NX)+2]);
+		   h_width[frame][i] += position[3*((i/2)+k*NX)+2];
+		   k++;
+		}while(((i/2)+k*NX) < N);
+		k_cnt = k;
+		k=0;
+	}
+	else
+	{
+		do{
+		  h_width[frame][i] += position[3*(NX+(i/2)+j*NX)+2];
+		  j++;
+		}while(NX+(i/2)+j*NX < N);
+		j_cnt = j;
+		j=0;
+	}
+
+  }
+
+  for(int i=0;i<2*NX;i++)
+  {
+	if(i%2==0)
+        {
+		h_width[frame][i] = h_width[frame][i]/k_cnt;
+        }
+	else
+	{
+		h_width[frame][i] = h_width[frame][i]/j_cnt;
+	}
+	//printf ("%d\t%.8f\t%d\t%d\n",i,h_width[frame][i],k_cnt,j_cnt);
+  }
+  return 0;
+}
+
+/*	Printing Width Height Average for all frames	*/
+int print_width(FILE *wid)
+{
+  for(int i=0;i<2*NX;i++)
+   {
+	fprintf(wid,"%d\t",i);
+        for(int j=10;j<11;j++)
+        {
+           fprintf(wid,"%.8f\t",h_width[j][i]);
+        }
+	fprintf(wid,"\n");
+   }
+  return 0;
 }

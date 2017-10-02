@@ -6,11 +6,11 @@ import gsd.hoomd
 import sys
 import random
 
-k=2.000 #Kappa
+k=10.000 #Kappa
 e=1440.000*k/2 #Epsilon
-nx=101
-ny=21
-Run=2
+nx=10
+ny=5
+Run=1
 
 print ("Kappa = ",k,"Epsilon = ",e)
 obser_file = '../../Sim_dump_ribbon/obser_L'+str(nx)+'W_'+str(ny)+'_k'+str(k)+'_r'+str(Run)+'.log'
@@ -56,5 +56,5 @@ hoomd.dump.gsd(filename=traj_file, group=group.all(), period=5000, overwrite=Tru
 
 md.integrate.nvt(group=group123,kT=1.0, tau=0.2)
 
-hoomd.run(1e5)
+hoomd.run(1e7)
 
