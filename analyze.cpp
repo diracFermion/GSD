@@ -224,14 +224,15 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
         printf("Average Hgt Fluctuation computation is dividing by Zero\n");
 	return 0;
    }
+   printf("Total Frames: %d\n",tot_frames);
    for(int i=0;i<N;i++)
    {
         if(particleID[i]==0 || particleID[i]==4)
                 hgt_fluctuation[i]=hgt_fluctuation[i]/tot_frames;
         if(i%NX!=NX-1)
-		fprintf(hgt,"%.8f ",hgt_fluctuation[i]);
+		fprintf(hgt,"%.8f ",sqrt(hgt_fluctuation[i]));
 	else
-		fprintf(hgt,"%.8f\n",hgt_fluctuation[i]);
+		fprintf(hgt,"%.8f\n",sqrt(hgt_fluctuation[i]));
 	
    }
    return 0;
