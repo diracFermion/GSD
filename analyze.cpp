@@ -287,11 +287,12 @@ int print_width(FILE *wid)
   for(int i=0;i<2*NX;i++)
    {
 	fprintf(wid,"%d\t",i);
-        for(int j=10;j<11;j++)
+        for(int j=0;j<1000;j++)
         {
            fprintf(wid,"%.8f\t",h_width[j][i]);
         }
 	fprintf(wid,"\n");
    }
+   printf("#Frames in last half of simulation : %d\n",FRAMES/2);
   return 0;
 }
