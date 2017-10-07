@@ -12,7 +12,7 @@ double backbone;
 double total_DHE,total_BHE;
 double hgt_fluctuation[NMAX]; 
 double h_avg_node[NMAX];
-double h_width[FRAMES][2*NX];
+double h_width[FRAMES/2][2*NX];
 
 double bond_length (int i,int j)
 {
@@ -284,7 +284,8 @@ int width_hgt(int frame)
 /*	Printing Width Height Average for all frames	*/
 int print_width(FILE *wid)
 {
-  for(int i=0;i<2*NX;i++)
+  fwrite(h_width, sizeof(double),FRAMES*NX,wid);
+/*  for(int i=0;i<2*NX;i++)
    {
 	fprintf(wid,"%d\t",i);
         for(int j=0;j<1000;j++)
@@ -294,5 +295,6 @@ int print_width(FILE *wid)
 	fprintf(wid,"\n");
    }
    printf("#Frames in last half of simulation : %d\n",FRAMES/2);
+*/
   return 0;
 }

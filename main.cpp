@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	  printf("Trajectory File : %s\n",trajectory_file);
 
 	  //Avg Width height of the ribbon
-	  sprintf(hgt_width_file,"../Sim_dump_ribbon/width_L%d_W%d_k%.1f_r%d.dat",NX,NY,KAPPA,run);
+	  sprintf(hgt_width_file,"../Sim_dump_ribbon/width_L%d_W%d_k%.1f_r%d.bin",NX,NY,KAPPA,run);
 	  printf("Height width File: %s\n",hgt_width_file);
 
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 		print_and_exit("Could Not Open File to write analyzed data");
 	   }
 
-	  wid = fopen(hgt_width_file, "w");
+	  wid = fopen(hgt_width_file, "wb");
   	  if (wid == NULL)
    	  {
         	print_and_exit("Could Not Open File to write height width data");
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 		
 		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),slider_T0-avg_slider_pos());
 		
-		if(frames>FRAMES/2)
+		if(frames>=FRAMES/2)
 		{
 			frame_cnt++;
 			sum_hgt_node();
