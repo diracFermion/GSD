@@ -247,19 +247,22 @@ int width_hgt(int frame)
 	if(i%2==0)
 	{
 		do {
-		   //printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+k*NX,position[3*((i/2)+k*NX)+2]);
-		   h_width[frame][i] += position[3*((i/2)+k*NX)+2];
+		   //if (frame==0)
+		   	//printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+2*k*NX,position[3*((i/2)+2*k*NX)+2]);
+		   h_width[frame][i] += position[3*((i/2)+2*k*NX)+2];
 		   k++;
-		}while(((i/2)+k*NX) < N);
+		}while(((i/2)+2*k*NX) < N);
 		k_cnt = k;
 		k=0;
 	}
 	else
 	{
 		do{
-		  h_width[frame][i] += position[3*(NX+(i/2)+j*NX)+2];
+		  //if (frame==0)
+		  	//printf("%d\t%d\t%d\t%.8f\n",N,i,NX+(i/2)+2*j*NX,position[3*(NX+(i/2)+2*j*NX)+2]);
+		  h_width[frame][i] += position[3*(NX+(i/2)+2*j*NX)+2];
 		  j++;
-		}while(NX+(i/2)+j*NX < N);
+		}while(NX+(i/2)+2*j*NX < N);
 		j_cnt = j;
 		j=0;
 	}
