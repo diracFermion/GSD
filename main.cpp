@@ -65,6 +65,8 @@ int main(int argc, char **argv)
 
 	  //printf("Reading GSD file: %s\n",argv[1]);
 	  //load_gsd(argv[1],0);
+	  
+	  /*	T=0 evaluations		*/
 	  load_gsd(init_strip,0);
 	  backbone_T0 = backbone_length(0);
 	  //backbone_length(0,fp);
@@ -73,7 +75,7 @@ int main(int argc, char **argv)
 	  
 	  slider_T0 = avg_slider_pos();
 	  fprintf(fp,"Frames\tDihedral_Bending_Energy\tBond_Harmonic_Energy\tPotential_Energy\tDelta_Backbone\tAvg_hgt\tAvg_hgt_Sq\tAvg_Slider_Pos\tDelta_Slider\n");  
-	  fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",0,bending_energy(),bond_harmonic_energy(),bending_energy()+bond_harmonic_energy(),backbone_length(0),avg_hgt(),avg_hgt_sq(),avg_slider_pos(),slider_T0-avg_slider_pos());
+	  fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",0,bending_energy(),bond_harmonic_energy(),bending_energy()+bond_harmonic_energy(),backbone_length(0),avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
 
 	  for(int frames=1;frames<FRAMES;frames++)
 	  {
@@ -84,7 +86,7 @@ int main(int argc, char **argv)
 		dhe = bending_energy();
 		bhe = bond_harmonic_energy();
 		
-		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),slider_T0-avg_slider_pos());
+		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
 		
 		if(frames>=FRAMES/2)
 		{

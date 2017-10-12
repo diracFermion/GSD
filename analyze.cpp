@@ -96,7 +96,7 @@ double bending_energy()
         //printf("BE = %lf\n",be);
 
   }
-  return(total_DHE);
+  return(total_DHE/Nd);
 }
 
 /*	Function evaluating Bond Harmonic Energy	*/
@@ -117,19 +117,29 @@ double bond_harmonic_energy()
 	//printf("Bond %d %d , se = %lf\n",bondGroup[2*i],bondGroup[2*i+1],se);
 	total_BHE = total_BHE + se;
   } 
-  return (total_BHE);
+  return (total_BHE/Nb);
 }
 
 /*	Function evaluating Average Z height above z=0 plane	*/
+/*	particle_id=1 clamped points on the left		*/
+/*	particle_id=0 Normal Lattice Sites			*/
+/*	particle_id=3 Nodes on the right constrained to X	*/
+/*	particle_id=4 Backbone of the ribbon excluding two	*/
+/*		 lattice sites at each boundary			*/
+
 double avg_hgt()
 {
    double hgt=0;
+   int node_cnt=0;
    for(int i=0;i<N;i++)
    {
 	if(particleID[i]==0 || particleID[i]==4)
+	{
 		hgt+=position[3*i+2];
+		node_cnt++;
+	}
    }
-   return (hgt/N);
+   return (hgt/node_cnt);
 }
 
 /*	Average <h^2> = 1/N * Sum_i(z_i - <z>)^2	*/
@@ -137,12 +147,16 @@ double avg_hgt_sq()
 {
    double hgtSq=0;
    double h_avg = avg_hgt();
+   int node_cnt=0;
    for(int i=0;i<N;i++)
    {
 	if(particleID[i]==0 || particleID[i]==4)
+	{
         	hgtSq+=pow((position[3*i+2]-h_avg),2);
+		node_cnt++;
+	}
    }
-   return (hgtSq/N);
+   return (hgtSq/node_cnt);
    
 }
 
@@ -224,7 +238,7 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
         printf("Average Hgt Fluctuation computation is dividing by Zero\n");
 	return 0;
    }
-   printf("Total Frames: %d\n",tot_frames);
+   printf("Total Frames in last half of Simulation over all runs: %d\n",tot_frames);
    for(int i=0;i<N;i++)
    {
         if(particleID[i]==0 || particleID[i]==4)
