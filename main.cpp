@@ -11,8 +11,29 @@
 #include "analyze.h"
 
 
+int NX,NY,LEN,RUN;
+double KAPPA,EPSILON;
+int STEPS,FRAMES;
+
+
+
 int main(int argc, char **argv)
 {
+   switch (argc){
+     case 6:
+       sscanf(argv[1],"%d",&NX);    
+       sscanf(argv[2],"%d",&NY);
+       sscanf(argv[3],"%lf",&KAPPA);
+       sscanf(argv[4],"%d",&RUN);
+       sscanf(argv[5],"%d",&STEPS); 
+       break;
+     default:
+       print_and_exit("Usage: %s NX NY KAPPA RUN STEPS\n",
+           argv[0]);
+  }
+  
+  FRAMES = STEPS/PERIOD;
+  EPSILON = 720.0*KAPPA;
 
   FILE *fp,*hgt,*wid;
   char filepath[256],init_strip[256],trajectory_file[256],hgt_profile_file[256],hgt_width_file[256];
@@ -25,7 +46,7 @@ int main(int argc, char **argv)
   printf("Init_strip.gsd : %s\n",init_strip);
 
   // Avg, Height Squared ribbon profile path
-  sprintf(hgt_profile_file,"../Sim_dump_ribbon/hgt_prof_L%d_W%d_k%.1f.dat",NX,NY,KAPPA);
+  sprintf(hgt_profile_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/hgt_prof_real.dat",NX,NY,KAPPA);
   printf("Height Profile File: %s\n",hgt_profile_file);
 
   hgt = fopen(hgt_profile_file, "w");
@@ -39,15 +60,15 @@ int main(int argc, char **argv)
   {
 
 	  // Output filepath 
-	  sprintf(filepath,"../Sim_dump_ribbon/L%d_W%d_k%.1f_r%d.log",NX,NY,KAPPA,run);
+	  sprintf(filepath,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/analyze.log",NX,NY,KAPPA,run);
 	  printf("Filename of analyzed data: %s\n",filepath);
 	  
 	  // Trajectory.gsd filepath
-	  sprintf(trajectory_file,"../Sim_dump_ribbon/traj_L%d_W%d_k%.1f_r%d.gsd",NX,NY,KAPPA,run);
+	  sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj_thermal.gsd",NX,NY,KAPPA,run);
 	  printf("Trajectory File : %s\n",trajectory_file);
 
 	  //Avg Width height of the ribbon
-	  sprintf(hgt_width_file,"../Sim_dump_ribbon/width_L%d_W%d_k%.1f_r%d.bin",NX,NY,KAPPA,run);
+	  sprintf(hgt_width_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/width.bin",NX,NY,KAPPA,run);
 	  printf("Height width File: %s\n",hgt_width_file);
 
 
@@ -111,7 +132,7 @@ int main(int argc, char **argv)
   for(int run=1;run<=RUN;run++)
   {
 	// Trajectory.gsd filepath
-	sprintf(trajectory_file,"../Sim_dump_ribbon/traj_L%d_W%d_k%.1f_r%d.gsd",NX,NY,KAPPA,run);
+	sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj_thermal.gsd",NX,NY,KAPPA,run);
 	for(int frames=FRAMES/2;frames<FRAMES;frames++)
 	{
 		load_gsd(trajectory_file,frames);

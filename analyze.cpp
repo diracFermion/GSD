@@ -12,7 +12,7 @@ double backbone;
 double total_DHE,total_BHE;
 double hgt_fluctuation[NMAX]; 
 double h_avg_node[NMAX];
-double h_width[FRAMES/2][2*NX];
+double h_width[MAXFRAMES][NXMAX];
 
 double bond_length (int i,int j)
 {
