@@ -24,9 +24,9 @@ double backbone_length(int frame)
 {
   int node;
   backbone=0;
-  for(int i=2;i<NX-1;i++)
+  for(int i=2;i<nx-1;i++)
   {
-	node = (NY/2)*NX + i;
+	node = (NY/2)*nx + i;
 	backbone += bond_length(node,node-1);
 	//printf("%d\t%d\t%lf\t%.8f\t%.8f\n",node,node-1,bond_length(node,node-1),position[3*node],position[3*(node-1)]);	  
   }
@@ -186,7 +186,7 @@ int initialize()
    }
    for(int i=0;i<FRAMES;i++)
    {
-	for(int j=0;j<NX;j++)
+	for(int j=0;j<nx;j++)
 	{
    	   h_width[i][j]=0;
 	}
@@ -243,7 +243,7 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
    {
         if(particleID[i]==0 || particleID[i]==4)
                 hgt_fluctuation[i]=hgt_fluctuation[i]/tot_frames;
-        if(i%NX!=NX-1)
+        if(i%nx!=nx-1)
 		fprintf(hgt,"%.8f ",sqrt(hgt_fluctuation[i]));
 	else
 		fprintf(hgt,"%.8f\n",sqrt(hgt_fluctuation[i]));
@@ -256,16 +256,16 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
 int width_hgt(int frame)
 {
   int k=0,j=0,k_cnt,j_cnt;
-  for(int i=0;i<2*NX;i++)
+  for(int i=0;i<2*nx;i++)
   {
 	if(i%2==0)
 	{
 		do {
 		   //if (frame==0)
-		   	//printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+2*k*NX,position[3*((i/2)+2*k*NX)+2]);
-		   h_width[frame][i] += position[3*((i/2)+2*k*NX)+2];
+		   	//printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+2*k*nx,position[3*((i/2)+2*k*nx)+2]);
+		   h_width[frame][i] += position[3*((i/2)+2*k*nx)+2];
 		   k++;
-		}while(((i/2)+2*k*NX) < N);
+		}while(((i/2)+2*k*nx) < N);
 		k_cnt = k;
 		k=0;
 	}
@@ -273,17 +273,17 @@ int width_hgt(int frame)
 	{
 		do{
 		  //if (frame==0)
-		  	//printf("%d\t%d\t%d\t%.8f\n",N,i,NX+(i/2)+2*j*NX,position[3*(NX+(i/2)+2*j*NX)+2]);
-		  h_width[frame][i] += position[3*(NX+(i/2)+2*j*NX)+2];
+		  	//printf("%d\t%d\t%d\t%.8f\n",N,i,nx+(i/2)+2*j*nx,position[3*(nx+(i/2)+2*j*nx)+2]);
+		  h_width[frame][i] += position[3*(nx+(i/2)+2*j*nx)+2];
 		  j++;
-		}while(NX+(i/2)+2*j*NX < N);
+		}while(nx+(i/2)+2*j*nx < N);
 		j_cnt = j;
 		j=0;
 	}
 
   }
 
-  for(int i=0;i<2*NX;i++)
+  for(int i=0;i<2*nx;i++)
   {
 	if(i%2==0)
         {
@@ -301,8 +301,8 @@ int width_hgt(int frame)
 /*	Printing Width Height Average for all frames	*/
 int print_width(FILE *wid)
 {
-  fwrite(h_width, sizeof(double),FRAMES*NX,wid);
-/*  for(int i=0;i<2*NX;i++)
+  fwrite(h_width, sizeof(double),FRAMES*nx,wid);
+/*  for(int i=0;i<2*nx;i++)
    {
 	fprintf(wid,"%d\t",i);
         for(int j=0;j<1000;j++)

@@ -10,7 +10,7 @@
 int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 float position[NMAX*3];
 uint32_t particleID[NMAX];
-char particleType[3][2];
+char particleType[5][2];
 
 void print_and_exit(char *format, ...)
 {
@@ -56,7 +56,7 @@ void load_gsd( char fname[30], uint64_t frame)
   gsd_close(&h);
   //printf("# particles = %d\n",N);
 //  printf("# particleType = %u\n",particleType);
-  for(int i=0;i<N;i++)
+/*  for(int i=0;i<N;i++)
   {
         //printf("%lf %lf %lf\n",position[3*i],position[3*i+1],position[3*i+2]);
   }
@@ -64,11 +64,11 @@ void load_gsd( char fname[30], uint64_t frame)
   {
         //printf("%s\n",particleType[i]);
   }
-
+*/
   if(frame==0)
   {
           printf("\n# bonds = %d\n",Nb);
-          for(int i=0;i<Nb;i++)
+/*          for(int i=0;i<Nb;i++)
           {
                 //printf("%d %d\n",bondGroup[2*i],bondGroup[2*i+1]);
           }
@@ -77,13 +77,15 @@ void load_gsd( char fname[30], uint64_t frame)
           {
                 //printf("%d %d %d %d\n",dihedralGroup[4*i],dihedralGroup[4*i+1],dihedralGroup[4*i+2],dihedralGroup[4*i+3]);
           }
+*/
   }
 
   //printf("Particle TypeIDs\n");
-  for(int i=0;i<N;i++)
+/*  for(int i=0;i<N;i++)
   {
         //printf("%u\n",particleID[i]);
   }
+*/
   return;
 }
 

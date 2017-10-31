@@ -6,8 +6,8 @@ DEBUG = -g
 CXXFLAGS = -Wall -c $(DEBUG) -std=c++11
 LFLAGS = $(DEBUG) -O2 -Wall 
 
-GSD : $(OBJS)
-	$(CXX) -o GSD $(OBJS) $(LFLAGS)
+GSDCOM : $(OBJS)
+	$(CXX) -o GSDCOM $(OBJS) $(LFLAGS)
 
 gsd.o : $(DEPS) gsd.h  gsd_fn.cpp
 	$(CXX) $(CXXFLAGS) gsd_fn.cpp
@@ -22,5 +22,5 @@ main.o : $(DEPS) gsd.h gsd_read.h analyze.h main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp
 
 clean:
-	\rm *.o *~ GSD
+	\rm *.o *~ GSDCOM
 
