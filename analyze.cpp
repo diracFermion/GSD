@@ -96,7 +96,7 @@ double bending_energy()
         //printf("BE = %lf\n",be);
 
   }
-  return(total_DHE/Nd);
+  return(total_DHE);
 }
 
 /*	Function evaluating Bond Harmonic Energy	*/
@@ -117,7 +117,7 @@ double bond_harmonic_energy()
 	//printf("Bond %d %d , se = %lf\n",bondGroup[2*i],bondGroup[2*i+1],se);
 	total_BHE = total_BHE + se;
   } 
-  return (total_BHE/Nb);
+  return (total_BHE);
 }
 
 /*	Function evaluating Average Z height above z=0 plane	*/
