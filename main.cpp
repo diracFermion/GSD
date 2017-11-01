@@ -55,6 +55,8 @@ int main(int argc, char **argv)
 	print_and_exit("Could Not Open File to write height profile data");
    }
 
+  /* Initializing the arrays	*/
+  initialize();
 
   for(int run=1;run<=RUN;run++)
   {
