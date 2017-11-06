@@ -13,6 +13,7 @@ double total_DHE,total_BHE;
 double hgt_fluctuation[NMAX]; 
 double h_avg_node[NMAX];
 double h_width[MAXFRAMES][NXMAX];
+double h_bb[MAXFRAMES][NXMAX];
 
 double bond_length (int i,int j)
 {
@@ -24,7 +25,7 @@ double backbone_length(int frame)
 {
   int node;
   backbone=0;
-  for(int i=2;i<nx-1;i++)
+  for(int i=1;i<nx;i++)
   {
 	node = (NY/2)*nx + i;
 	backbone += bond_length(node,node-1);
@@ -133,11 +134,11 @@ double avg_hgt()
    int node_cnt=0;
    for(int i=0;i<N;i++)
    {
-	if(particleID[i]==0 || particleID[i]==4)
-	{
-		hgt+=position[3*i+2];
-		node_cnt++;
-	}
+	//if(particleID[i]==0 || particleID[i]==4)
+	//{
+	hgt+=position[3*i+2];
+	node_cnt++;
+	//}
    }
    return (hgt/node_cnt);
 }
@@ -150,11 +151,11 @@ double avg_hgt_sq()
    int node_cnt=0;
    for(int i=0;i<N;i++)
    {
-	if(particleID[i]==0 || particleID[i]==4)
-	{
+	//if(particleID[i]==0 || particleID[i]==4)
+	//{
         	hgtSq+=pow((position[3*i+2]-h_avg),2);
 		node_cnt++;
-	}
+	//}
    }
    return (hgtSq/node_cnt);
    
@@ -177,19 +178,36 @@ double avg_slider_pos()
 }
 
 /*	Initialize arrays	*/
-int initialize()
+int initialize1()
 {
    for(int i=0;i<N;i++)
    {
 	h_avg_node[i]=0;
+   }
+   return 0;
+}
+
+int initialize2()
+{
+   for(int i=0;i<N;i++)
+   {
         hgt_fluctuation[i]=0;
    }
+   return 0;
+}
+
+int initialize3()
+{
    for(int i=0;i<FRAMES;i++)
    {
-	for(int j=0;j<nx;j++)
+	for(int j=0;j<2*nx;j++)
 	{
    	   h_width[i][j]=0;
 	}
+	for(int k=0;k<nx;k++)
+        {
+           h_bb[i][k]=0;
+        }
    }
    return 0;
 }
@@ -250,6 +268,26 @@ int avg_hgt_profile(FILE *hgt,int tot_frames)
 	
    }
    return 0;
+}
+
+/*	Backbone Height average		*/
+int bb_hgt(int frame)
+{
+ int j=0; //count over the backbone nodes
+ h_bb[frame][0] = 0; //first two nodes are fixed 
+ h_bb[frame][1] = 0;
+ j = 2;
+ for(int i=0;i<N;i++)
+   {
+        if(particleID[i]==4)
+        {
+		h_bb[frame][j] = position[3*i+2];
+		j++;
+        }
+   }
+ h_bb[frame][j] = 0;
+ h_bb[frame][j+1] = 0; 
+ return 0;
 }
 
 /*	Width Height Average	*/
@@ -315,3 +353,11 @@ int print_width(FILE *wid)
 */
   return 0;
 }
+
+/*	Printing Backbone height for all frames	*/
+int print_bb(FILE *bb)
+{
+  fwrite(h_bb, sizeof(double),FRAMES*nx/2,bb);
+  return 0;
+}
+

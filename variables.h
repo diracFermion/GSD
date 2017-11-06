@@ -24,6 +24,8 @@ extern double hgt_fluctuation[NMAX];
 extern double h_avg_node[NMAX];
 extern double hgt_fluctuation[NMAX];
 extern double h_width[MAXFRAMES][NXMAX];
+extern double h_bb[MAXFRAMES][NXMAX];
+
 
 extern int nx,NY,RUN,STEPS,LEN,FRAMES;
 extern double KAPPA,EPSILON;
