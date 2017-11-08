@@ -14,7 +14,7 @@
 int nx,NY,LEN,RUN;
 double KAPPA,EPSILON;
 int STEPS,FRAMES;
-
+double cnode[MAXRUN][MAXFRAMES];
 
 
 int main(int argc, char **argv)
@@ -28,15 +28,14 @@ int main(int argc, char **argv)
        sscanf(argv[5],"%d",&STEPS); 
        break;
      default:
-       print_and_exit("Usage: %s nx NY KAPPA RUN STEPS\n",
-           argv[0]);
+       print_and_exit("Usage: %s nx NY KAPPA RUN STEPS\n",argv[0]);
   }
   
   FRAMES = STEPS/PERIOD;
   EPSILON = 720.0*KAPPA;
 
-  FILE *fp,*hgt,*wid,*bb;
-  char filepath[256],init_strip[256],trajectory_file[256],hgt_profile_file[256],hgt_width_file[256],hgt_bb_file[256];
+  FILE *fp,*hgt,*wid,*bb,*cn;
+  char filepath[256],init_strip[256],trajectory_file[256],hgt_profile_file[256],hgt_width_file[256],hgt_bb_file[256],cnode_file[256];
   double dhe,bhe;
   double backbone_T0,slider_T0;;
   int frame_cnt=0;
@@ -49,11 +48,21 @@ int main(int argc, char **argv)
   sprintf(hgt_profile_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/hgt_prof_real.dat",nx,NY,KAPPA);
   printf("Height Profile File: %s\n",hgt_profile_file);
 
+  //Time series of central node of the ribbon
+  sprintf(cnode_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/cnode.bin",nx,NY,KAPPA);
+  printf("Central node time series File: %s\n",cnode_file);
+
   hgt = fopen(hgt_profile_file, "w");
   if (hgt == NULL)
    {
 	print_and_exit("Could Not Open File to write height profile data");
    }
+
+  cn = fopen(cnode_file, "wb");
+  if (cn == NULL)
+  {
+  	print_and_exit("Could Not Open File to write central node time series");
+  } 
 
   /* Initializing the arrays	*/
   //initialize();
@@ -78,7 +87,6 @@ int main(int argc, char **argv)
 	  //Height of the ribbon backbone
           sprintf(hgt_bb_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/backbone.bin",nx,NY,KAPPA,run);
           printf("Height width File: %s\n",hgt_bb_file);
-
 
 	  fp = fopen(filepath, "w");
 	  if (fp == NULL)
@@ -121,6 +129,8 @@ int main(int argc, char **argv)
 		load_gsd(trajectory_file,frames);
 		//backbone_length(frames,fp);
 		//printf("%d\t%lf\t%lf\n",frames,position[3*(nx-1)],position[3*(LEN-nx)]);
+		cnode[run-1][frames-1]=position[3*((N+1)/2)+2];
+		//printf("%d\t%.8f\n",frames,cnode[run][frames-1]);
 		dhe = bending_energy();
 		bhe = bond_harmonic_energy();
 		
@@ -139,12 +149,17 @@ int main(int argc, char **argv)
 		//if(frames == FRAMES/2 + 1)
 		//width_hgt(0);			
 	  }
+
 	  print_width(wid); 
 	  print_bb(bb);
 	  fclose(fp);
 	  fclose(wid);
 	  fclose(bb);
   }
+  
+  /*    writing central node height time series         */
+  fwrite(cnode, sizeof(double),MAXRUN*FRAMES,cn); 
+  fclose(cn);
 
   //Average Height of each node (averaged over last half of the frames)
   avg_hgt_node(frame_cnt);

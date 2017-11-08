@@ -11,6 +11,7 @@
 //#define EPSILON 7200.0
 #define a 1.0
 //#define RUN 10
+#define MAXRUN 20
 
 extern int N,Nb,Nd,bondGroup[NMAX*2],dihedralGroup[NMAX*4];
 //N:#particles, Nb:#bonds, Nd:#dihedrals
@@ -25,7 +26,7 @@ extern double h_avg_node[NMAX];
 extern double hgt_fluctuation[NMAX];
 extern double h_width[MAXFRAMES][NXMAX];
 extern double h_bb[MAXFRAMES][NXMAX];
-
+extern double cnode[MAXRUN][MAXFRAMES];
 
 extern int nx,NY,RUN,STEPS,LEN,FRAMES;
 extern double KAPPA,EPSILON;
