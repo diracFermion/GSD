@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   printf("Init_strip.gsd : %s\n",init_strip);
 
   // Avg, Height Squared ribbon profile path
-  sprintf(hgt_profile_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/hgt_prof_real.dat",nx,NY,KAPPA);
+/*  sprintf(hgt_profile_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/hgt_prof_real.dat",nx,NY,KAPPA);
   printf("Height Profile File: %s\n",hgt_profile_file);
 
   hgt = fopen(hgt_profile_file, "w");
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
    {
 	print_and_exit("Could Not Open File to write height profile data");
    }
-
+*/
   /* Initializing the arrays	*/
   //initialize();
 
@@ -62,21 +62,21 @@ int main(int argc, char **argv)
   {
 
 	  // Output filepath 
-	  sprintf(filepath,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/analyze.log",nx,NY,KAPPA,run);
+	  sprintf(filepath,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/analyzeSlider.log",nx,NY,KAPPA,run);
 	  printf("Filename of analyzed data: %s\n",filepath);
 	  
 	  // Trajectory.gsd filepath
-	  sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj_thermal.gsd",nx,NY,KAPPA,run);
+	  sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj.gsd",nx,NY,KAPPA,run);
 	  printf("Trajectory File : %s\n",trajectory_file);
 
-	  //Avg Width height of the ribbon
+/*	  //Avg Width height of the ribbon
 	  sprintf(hgt_width_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/width.bin",nx,NY,KAPPA,run);
 	  printf("Height width File: %s\n",hgt_width_file);
 
 	  //Height of the ribbon backbone
           sprintf(hgt_bb_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/backbone.bin",nx,NY,KAPPA,run);
           printf("Height width File: %s\n",hgt_bb_file);
-
+*/
 
 	  fp = fopen(filepath, "w");
 	  if (fp == NULL)
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 		print_and_exit("Could Not Open File to write analyzed data");
 	   }
 
-	  wid = fopen(hgt_width_file, "wb");
+/*	  wid = fopen(hgt_width_file, "wb");
   	  if (wid == NULL)
    	  {
         	print_and_exit("Could Not Open File to write height width data");
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
           {
                 print_and_exit("Could Not Open File to write backbone height data");
           }
-
+*/
 	  //printf("Reading GSD file: %s\n",argv[1]);
 	  //load_gsd(argv[1],0);
 	  
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 	  initialize3();
 	  
 	  slider_T0 = avg_slider_pos();
-	  fprintf(fp,"Frames\tDihedral_Bending_Energy\tBond_Harmonic_Energy\tPotential_Energy\tDelta_Backbone\tAvg_hgt\tAvg_hgt_Sq\tAvg_Slider_Pos\tDelta_Slider\n");  
+	  fprintf(fp,"Frames\tDihedral_Bending_Energy\tBond_Harmonic_Energy\tPotential_Energy\tBackbone\tAvg_hgt\tAvg_hgt_Sq\tAvg_Slider_Pos\tDelta_Slider\n");  
 	  fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",0,bending_energy(),bond_harmonic_energy(),bending_energy()+bond_harmonic_energy(),backbone_length(0),avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
 
 	  for(int frames=1;frames<FRAMES;frames++)
@@ -122,28 +122,28 @@ int main(int argc, char **argv)
 		dhe = bending_energy();
 		bhe = bond_harmonic_energy();
 		
-		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
+		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames),avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
 		
 		if(frames>=FRAMES/2)
 		{
 			initialize1();
 			frame_cnt++;
 			sum_hgt_node();
-			width_hgt(c);
-			bb_hgt(c);
+			//width_hgt(c);
+			//bb_hgt(c);
 			c++;
 			//printf("%d\t",frames - (FRAMES/2 + 1));
 		}
 		//if(frames == FRAMES/2 + 1)
 		//width_hgt(0);			
 	  }
-	  print_width(wid); 
-	  print_bb(bb);
+	  //print_width(wid); 
+	  //print_bb(bb);
 	  fclose(fp);
-	  fclose(wid);
-	  fclose(bb);
+	  //fclose(wid);
+	  //fclose(bb);
   }
-
+/*
   //Average Height of each node (averaged over last half of the frames)
   avg_hgt_node(frame_cnt);
 
@@ -166,6 +166,6 @@ int main(int argc, char **argv)
   avg_hgt_profile(hgt,frame_cnt);
 
   fclose(hgt);
-
+*/
   return 0;
 }
