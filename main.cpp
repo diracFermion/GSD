@@ -58,6 +58,8 @@ int main(int argc, char **argv)
   /* Initializing the arrays	*/
   //initialize();
 
+  int c; //counter for frames inside each run 
+
   for(int run=1;run<=RUN;run++)
   {
 
@@ -104,7 +106,7 @@ int main(int argc, char **argv)
 	  backbone_T0 = backbone_length(0);
 	  //backbone_length(0,fp);
 	  
-          int c=0;//count of frames > FRAMES/2
+          c=0;//count of frames > FRAMES/2
 	  initialize1();
 	  initialize3();
 	  
