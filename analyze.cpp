@@ -287,6 +287,15 @@ int bb_hgt(int frame)
    }
  h_bb[frame][j] = 0;
  h_bb[frame][j+1] = 0; 
+/*
+ if(frame == 0)
+ {
+	for(int i=0;i<nx;i++)
+	{
+		printf("%d\t%.8f\n",i,h_bb[frame][i]);
+	}
+ }
+*/
  return 0;
 }
 
@@ -331,7 +340,8 @@ int width_hgt(int frame)
 	{
 		h_width[frame][i] = h_width[frame][i]/j_cnt;
 	}
-	//printf ("%d\t%.8f\t%d\t%d\n",i,h_width[frame][i],k_cnt,j_cnt);
+	//if(frame == 0)
+		//printf ("%d\t%.8f\t%d\t%d\n",i,h_width[frame][i],k_cnt,j_cnt);
   }
   return 0;
 }
