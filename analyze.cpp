@@ -302,44 +302,22 @@ int bb_hgt(int frame)
 /*	Width Height Average	*/
 int width_hgt(int frame)
 {
-  int k=0,j=0,k_cnt,j_cnt;
-  for(int i=0;i<2*nx;i++)
+  int k=0,k_cnt;
+  for(int i=0;i<nx;i++)
   {
-	if(i%2==0)
-	{
-		do {
-		   //if (frame==0)
-		   	//printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+2*k*nx,position[3*((i/2)+2*k*nx)+2]);
-		   h_width[frame][i] += position[3*((i/2)+2*k*nx)+2];
-		   k++;
-		}while(((i/2)+2*k*nx) < N);
-		k_cnt = k;
-		k=0;
-	}
-	else
-	{
-		do{
-		  //if (frame==0)
-		  	//printf("%d\t%d\t%d\t%.8f\n",N,i,nx+(i/2)+2*j*nx,position[3*(nx+(i/2)+2*j*nx)+2]);
-		  h_width[frame][i] += position[3*(nx+(i/2)+2*j*nx)+2];
-		  j++;
-		}while(nx+(i/2)+2*j*nx < N);
-		j_cnt = j;
-		j=0;
-	}
-
+	do {
+	   //if (frame==0)
+		//printf("%d\t%d\t%d\t%.8f\n",N,i,(i/2)+2*k*nx,position[3*((i/2)+2*k*nx)+2]);
+	   h_width[frame][i] += position[3*(i+2*k*nx)+2];
+	   k++;
+	}while(((i/2)+2*k*nx) < N);
+	k_cnt = k;
+	k=0;
   }
 
-  for(int i=0;i<2*nx;i++)
+  for(int i=0;i<nx;i++)
   {
-	if(i%2==0)
-        {
-		h_width[frame][i] = h_width[frame][i]/k_cnt;
-        }
-	else
-	{
-		h_width[frame][i] = h_width[frame][i]/j_cnt;
-	}
+	h_width[frame][i] = h_width[frame][i]/k_cnt;
 	//if(frame == 0)
 		//printf ("%d\t%.8f\t%d\t%d\n",i,h_width[frame][i],k_cnt,j_cnt);
   }
@@ -349,25 +327,26 @@ int width_hgt(int frame)
 /*	Printing Width Height Average for all frames	*/
 int print_width(FILE *wid)
 {
-  fwrite(h_width, sizeof(double),FRAMES*nx,wid);
-/*  for(int i=0;i<2*nx;i++)
+  fwrite(h_width, sizeof(double),MAXFRAMES*NXMAX,wid);//FRAMES*nx,wid);
+/*  for(int i=0;i<nx;i++)
    {
-	fprintf(wid,"%d\t",i);
-        for(int j=0;j<1000;j++)
+	printf("%d\t",i);
+        for(int j=2494;j<=2500;j++)
         {
-           fprintf(wid,"%.8f\t",h_width[j][i]);
+           printf("%.8f\t",h_width[j][i]);
         }
-	fprintf(wid,"\n");
+	printf("\n");
    }
-   printf("#Frames in last half of simulation : %d\n",FRAMES/2);
 */
+   printf("#Frames in last half of simulation : %d\n",FRAMES/2);
+
   return 0;
 }
 
 /*	Printing Backbone height for all frames	*/
 int print_bb(FILE *bb)
 {
-  fwrite(h_bb, sizeof(double),FRAMES*nx/2,bb);
+  fwrite(h_bb, sizeof(double),MAXFRAMES*NXMAX,bb);//FRAMES*nx/2,bb);
   return 0;
 }
 

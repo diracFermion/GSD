@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 
 	  //Height of the ribbon backbone
           sprintf(hgt_bb_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/backbone.bin",nx,NY,KAPPA,run);
-          printf("Height width File: %s\n",hgt_bb_file);
+          printf("Backbone Height File: %s\n",hgt_bb_file);
 
 	  fp = fopen(filepath, "w");
 	  if (fp == NULL)
@@ -129,8 +129,9 @@ int main(int argc, char **argv)
 		load_gsd(trajectory_file,frames);
 		//backbone_length(frames,fp);
 		//printf("%d\t%lf\t%lf\n",frames,position[3*(nx-1)],position[3*(LEN-nx)]);
-		cnode[run-1][frames-1]=position[3*((N+1)/2)+2];
-		//printf("%d\t%.8f\n",frames,cnode[run][frames-1]);
+		//cnode[run-1][frames-1]=position[3*((N+1)/2)+2];
+		if(frames==10)
+			printf("%d\t%d\t%.8f\t%.8f\t%d\n",run,frames,cnode[run-1][frames-1],position[3*((N+1)/2)+2],N);
 		dhe = bending_energy();
 		bhe = bond_harmonic_energy();
 		
@@ -143,8 +144,10 @@ int main(int argc, char **argv)
 			sum_hgt_node();
 			width_hgt(c);
 			bb_hgt(c);
+			cnode[run-1][c]=position[3*((N+1)/2)+2];
 			c++;
-			//printf("%d\t",frames - (FRAMES/2 + 1));
+			//if(c>2493)
+				//printf("%d\t",c);//frames - (FRAMES/2 + 1));
 		}
 		//if(frames == FRAMES/2 + 1)
 		//width_hgt(0);			
@@ -158,7 +161,7 @@ int main(int argc, char **argv)
   }
   
   /*    writing central node height time series         */
-  fwrite(cnode, sizeof(double),MAXRUN*FRAMES,cn); 
+  fwrite(cnode, sizeof(double),MAXRUN*MAXFRAMES,cn); 
   fclose(cn);
 
   //Average Height of each node (averaged over last half of the frames)
