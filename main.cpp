@@ -45,11 +45,11 @@ int main(int argc, char **argv)
   printf("Init_strip.gsd : %s\n",init_strip);
 
   // Avg, Height Squared ribbon profile path
-  sprintf(hgt_profile_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/hgt_prof_real.dat",nx,NY,KAPPA);
+  sprintf(hgt_profile_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/hgt_prof_real.dat",nx,NY,KAPPA);
   printf("Height Profile File: %s\n",hgt_profile_file);
 
   //Time series of central node of the ribbon
-  sprintf(cnode_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/cnode.bin",nx,NY,KAPPA);
+  sprintf(cnode_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/cnode.bin",nx,NY,KAPPA);
   printf("Central node time series File: %s\n",cnode_file);
 
   hgt = fopen(hgt_profile_file, "w");
@@ -67,25 +67,25 @@ int main(int argc, char **argv)
   /* Initializing the arrays	*/
   //initialize();
 
-  int c; //counter for frames inside each run 
+  int c,f; //counter for frames inside each run 
 
   for(int run=1;run<=RUN;run++)
   {
 
 	  // Output filepath 
-	  sprintf(filepath,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/analyze.log",nx,NY,KAPPA,run);
+	  sprintf(filepath,"../Sim_dump_stretched/L%d/W%d/k%.1f/r%d/analyze.log",nx,NY,KAPPA,run);
 	  printf("Filename of analyzed data: %s\n",filepath);
 	  
 	  // Trajectory.gsd filepath
-	  sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj_thermal.gsd",nx,NY,KAPPA,run);
+	  sprintf(trajectory_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/r%d/traj_stretched.gsd",nx,NY,KAPPA,run);
 	  printf("Trajectory File : %s\n",trajectory_file);
 
 	  //Avg Width height of the ribbon
-	  sprintf(hgt_width_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/width.bin",nx,NY,KAPPA,run);
+	  sprintf(hgt_width_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/r%d/width.bin",nx,NY,KAPPA,run);
 	  printf("Height width File: %s\n",hgt_width_file);
 
 	  //Height of the ribbon backbone
-          sprintf(hgt_bb_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/backbone.bin",nx,NY,KAPPA,run);
+          sprintf(hgt_bb_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/r%d/backbone.bin",nx,NY,KAPPA,run);
           printf("Backbone Height File: %s\n",hgt_bb_file);
 
 	  fp = fopen(filepath, "w");
@@ -113,7 +113,8 @@ int main(int argc, char **argv)
 	  load_gsd(init_strip,0);
 	  backbone_T0 = backbone_length(0);
 	  //backbone_length(0,fp);
-	  
+	
+	  f=0;  
           c=0;//count of frames > FRAMES/2
 	  initialize1();
 	  initialize3();
@@ -136,7 +137,12 @@ int main(int argc, char **argv)
 		bhe = bond_harmonic_energy();
 		
 		fprintf(fp,"%d\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\t%.8f\n",frames,dhe,bhe,dhe+bhe,backbone_length(frames)-backbone_T0,avg_hgt(),avg_hgt_sq(),avg_slider_pos(),(slider_T0-avg_slider_pos())/avg_slider_pos());
-		
+	
+		if(frames>=(4*FRAMES/5))
+		{
+			cnode[run-1][f]=position[3*((N+1)/2)+2];
+			f++;
+		}	
 		if(frames>=FRAMES/2)
 		{
 			initialize1();
@@ -144,7 +150,7 @@ int main(int argc, char **argv)
 			sum_hgt_node();
 			width_hgt(c);
 			bb_hgt(c);
-			cnode[run-1][c]=position[3*((N+1)/2)+2];
+			//cnode[run-1][c]=position[3*((N+1)/2)+2];
 			c++;
 			//if(c>2493)
 				//printf("%d\t",c);//frames - (FRAMES/2 + 1));
@@ -171,7 +177,7 @@ int main(int argc, char **argv)
   for(int run=1;run<=RUN;run++)
   {
 	// Trajectory.gsd filepath
-	sprintf(trajectory_file,"../Sim_dump_ribbon/L%d/W%d/k%.1f/r%d/traj_thermal.gsd",nx,NY,KAPPA,run);
+	sprintf(trajectory_file,"../Sim_dump_stretched/L%d/W%d/k%.1f/r%d/traj_stretched.gsd",nx,NY,KAPPA,run);
 	initialize2(); // Initializing the hgt_fluctuation array 
 	for(int frames=FRAMES/2;frames<FRAMES;frames++)
 	{
